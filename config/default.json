@@ -1,0 +1,15 @@
+{
+  "jwtSecret": "dZhciSlHRXaqaKlEBa5hxVodVjBNlJEM7oGUMx8KGsuqdiGoq4J16EVGaPsppBW",
+  "server": {
+    "port": 3000
+  },
+  "ormconfig": {
+    "type": "mongodb",
+    "host": "localhost",
+    "port" : 27017,
+    "database": "carekit",
+    "entities": [
+      "`${__dirname}/entity/**/*`"
+    ]
+  }
+}

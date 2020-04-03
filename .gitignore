@@ -1,0 +1,9 @@
+.vscode/
+node_modules/
+.history
+package-lock.json
+database.sqlite
+src/migration/*
+*.pem
+*.crt
+*.ppk
