@@ -7,7 +7,7 @@ import * as cors from "cors";
 import routes from "./routes/routes";
 import * as config from "config";
 import * as fs from "fs";
-//var ca = [fs.readFileSync(__dirname + "/cert.pem")];
+//const ca = [fs.readFileSync(__dirname + "/cert.pem")];
 
 createConnection()
   .then(async connection => {
