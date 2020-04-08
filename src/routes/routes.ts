@@ -36,6 +36,7 @@ import outcome from "./outcome";
 import contact from "./contact";
 import patient from "./patient";
 import careplan from "./careplan";
+import mongo from "./mongoOps";
 
 const routes = Router();
 
@@ -46,5 +47,6 @@ routes.use("/outcome", outcome);
 routes.use("/contact", contact);
 routes.use("/patient", patient);
 routes.use("/careplan", careplan);
+routes.use("/mongo", mongo);
 
 export default routes;

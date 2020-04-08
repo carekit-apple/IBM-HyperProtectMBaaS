@@ -36,11 +36,11 @@ import { getRepository } from "typeorm";
 
 class AuthController {
   static newAccount = async (req: Request, res: Response) => {
-    // todo : Apple ID
+     res.status(501).send("Not implemented");
   }
 
   static login = async (req: Request, res: Response) => {
-  //  todo : Apple ID
+   res.status(501).send("Not implemented");
   };
 }
 export default AuthController;

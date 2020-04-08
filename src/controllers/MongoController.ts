@@ -27,12 +27,18 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 import { Request, Response } from "express";
 
 class MongoController {
   static commit = async (req: Request, res: Response) => {
-    //todo
+    res.status(200).send("Committed");
+  };
+
+  // Delete all collections and documents in the DB
+  // WARNING : For test purposes only. Auth with admin RBAC.
+  static delete = async (req: Request, res: Response) => {
+    res.status(501).send("Not implemented");
   };
 }
 
