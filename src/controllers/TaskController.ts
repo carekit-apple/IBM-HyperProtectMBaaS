@@ -27,7 +27,7 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { OCKTask } from "../entity/OCKTask";
@@ -43,7 +43,7 @@ class TaskController {
   };
 
   static getOneById = async (req: Request, res: Response) => {
-     //todo
+    //todo
   };
 
   static newTask = async (req: Request, res: Response) => {
@@ -59,6 +59,20 @@ class TaskController {
 
     //If all ok, send 201 response
     res.status(201).send("Task stored");
+  };
+
+  // Delete all tasks in the collection
+  static deleteTasks = async (req: Request, res: Response) => {
+    const taskRepository = getRepository(OCKTask);
+    try {
+      await taskRepository.deleteMany({});
+    } catch (e) {
+      res.status(409).send("Does not exist");
+      return;
+    }
+
+    //If all ok, send 201 response
+    res.status(201).send("Tasks deleted");
   };
 }
 

@@ -29,7 +29,7 @@
  */
 
 import { Router } from "express";
-import CarePlanController from "../controllers/CarePlanController";
+import CarePlanController from '../controllers/CarePlanController';
 import { validateToken } from "../middleware/validateToken";
 import { validateRole } from "../middleware/validateRole";
 
@@ -54,6 +54,13 @@ router.post(
   "/",
   //  [validateToken, validateRole(["patient"])],
   CarePlanController.newCarePlan
+);
+
+//Delete all careplans. This is used primarity for testing
+router.delete(
+  "/",
+  //  [validateToken, validateRole(["patient"])],
+  CarePlanController.deleteCarePlans
 );
 
 export default router;

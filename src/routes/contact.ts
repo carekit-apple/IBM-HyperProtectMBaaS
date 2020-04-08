@@ -29,7 +29,7 @@
  */
 
 import { Router } from "express";
-import ContactController from "../controllers/ContactController";
+import ContactController from '../controllers/ContactController';
 import { validateToken } from "../middleware/validateToken";
 import { validateRole } from "../middleware/validateRole";
 
@@ -54,6 +54,13 @@ router.post(
   "/",
   //  [validateToken, validateRole(["patient"])],
   ContactController.newContact
+);
+
+//Delete all contacts. This is used primarity for testing
+router.delete(
+  "/",
+  //  [validateToken, validateRole(["patient"])],
+  ContactController.deleteContacts
 );
 
 export default router;

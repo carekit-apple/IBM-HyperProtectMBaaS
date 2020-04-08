@@ -33,6 +33,15 @@ import MongoController from "../controllers/MongoController";
 import { validateToken } from "../middleware/validateToken";
 
 const router = Router();
-router.post("/commit", MongoController.login);
+router.get(
+  "/commit",
+  //  [validateToken, validateRole(["patient"])],
+  MongoController.commit
+);
+router.get(
+  "/delete",
+  //  [validateToken, validateRole(["patient"])],
+  MongoController.delete
+);
 
 export default router;

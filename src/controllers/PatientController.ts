@@ -27,7 +27,7 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { OCKPatient } from "../entity/OCKPatient";
@@ -43,7 +43,7 @@ class PatientController {
   };
 
   static getOneById = async (req: Request, res: Response) => {
-     //todo
+    //todo
   };
 
   static newPatient = async (req: Request, res: Response) => {
@@ -59,6 +59,20 @@ class PatientController {
 
     //If all ok, send 201 response
     res.status(201).send("Patient stored");
+  };
+
+  // Delete all patients in the collection
+  static deletePatients = async (req: Request, res: Response) => {
+    const patientRepository = getRepository(OCKPatient);
+    try {
+      await patientRepository.deleteMany({});
+    } catch (e) {
+      res.status(409).send("Does not exist");
+      return;
+    }
+
+    //If all ok, send 201 response
+    res.status(201).send("Patients deleted");
   };
 }
 

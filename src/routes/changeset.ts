@@ -29,7 +29,7 @@
  */
 
 import { Router } from "express";
-import ChangeSetController from "../controllers/ChangeSetController";
+import ChangeSetController from '../controllers/ChangeSetController';
 import { validateToken } from "../middleware/validateToken";
 import { validateRole } from "../middleware/validateRole";
 
@@ -49,11 +49,11 @@ router.post(
   ChangeSetController.newChangeSet
 );
 
-//Delete all changets for patient
+//Delete all changesets. This is used primarity for testing
 router.delete(
-  "/:id([0-9]+)",
+  "/",
   //  [validateToken, validateRole(["patient"])],
-  ChangeSetController.deleteChangeSet
+  ChangeSetController.deleteChangeSets
 );
 
 export default router;

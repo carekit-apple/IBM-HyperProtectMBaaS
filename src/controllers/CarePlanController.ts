@@ -59,6 +59,20 @@ class CarePlanController {
     //If all ok, send 201 response
     res.status(201).send("CarePlan stored");
   };
+
+  // Delete all carePlans in the collection
+  static deleteCarePlans = async (req: Request, res: Response) => {
+    const carePlanRepository = getRepository(OCKCarePlan);
+    try {
+      await carePlanRepository.deleteMany({});
+    } catch (e) {
+      res.status(409).send("Does not exist");
+      return;
+    }
+
+    //If all ok, send 201 response
+    res.status(201).send("CarePlans deleted");
+  };
 }
 
 export default CarePlanController;

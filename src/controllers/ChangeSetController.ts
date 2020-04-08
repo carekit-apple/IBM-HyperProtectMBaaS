@@ -76,8 +76,18 @@ class ChangeSetController {
     res.status(201).send("Changeset stored");
   };
 
-  static deleteChangeSet = async (req: Request, res: Response) => {
-    //todo
+  // Delete all changeSets in the collection
+  static deleteChangeSets = async (req: Request, res: Response) => {
+    const changeSetRepository = getRepository(OCKChangeSet);
+    try {
+      await changeSetRepository.deleteMany({});
+    } catch (e) {
+      res.status(409).send("Does not exist");
+      return;
+    }
+
+    //If all ok, send 201 response
+    res.status(201).send("ChangeSets deleted");
   };
 }
 

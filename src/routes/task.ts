@@ -56,4 +56,12 @@ router.post(
   TaskController.newTask
 );
 
+//Delete all tasks. This is used primarity for testing
+router.delete(
+  "/",
+  //  [validateToken, validateRole(["patient"])],
+  TaskController.deleteTasks
+);
+
+
 export default router;

@@ -60,6 +60,20 @@ class ContactController {
     //If all ok, send 201 response
     res.status(201).send("Contact stored");
   };
+
+  // Delete all contacts in the collection
+  static deleteContacts = async (req: Request, res: Response) => {
+    const contactRepository = getRepository(OCKContact);
+    try {
+      await contactRepository.deleteMany({});
+    } catch (e) {
+      res.status(409).send("Does not exist");
+      return;
+    }
+
+    //If all ok, send 201 response
+    res.status(201).send("Contacts deleted");
+  };
 }
 
 export default ContactController;
