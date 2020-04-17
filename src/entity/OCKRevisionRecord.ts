@@ -28,10 +28,18 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column } from "typeorm";
-import { OCKTask } from "./OCKTask";
+import { Column, Entity, ObjectIdColumn, ObjectID } from "typeorm";
+import { OCKEntity } from "./OCKEntity";
+import { KnowledgeVector } from "./KnowledgeVector";
 
-export class Entity {
-  @Column(type => OCKTask)
-  task?: OCKTask;
+@Entity()
+export class OCKRevisionRecord {
+  @ObjectIdColumn()
+  _id: ObjectID;
+
+  @Column((type) => KnowledgeVector)
+  knowledgeVector: KnowledgeVector;
+
+  @Column({type : OCKEntity, array : true})
+  entities: OCKEntity[];
 }

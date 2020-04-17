@@ -27,25 +27,25 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
-import { Name } from './Name';
-import { Timezone } from './Timezone';
+import { Name } from "./Name";
+import { Timezone } from "./Timezone";
 
 @Entity()
 export class OCKContact {
-    @ObjectIdColumn()
-    _id:            ObjectID;
-    
-    @Column()
-    id?:            string;
-    
-    @Column(type => Timezone)
-    timezone?:      Timezone;
-    
-    @Column(type => Name)
-    name?:          Name;
-    
-    @Column()
-    effectiveDate?: number;
+  @ObjectIdColumn()
+  _id: ObjectID;
+
+  @Column()
+  id?: string;
+
+  @Column((type) => Timezone)
+  timezone?: Timezone;
+
+  @Column((type) => Name)
+  name?: Name;
+
+  @Column()
+  effectiveDate?: number;
 }

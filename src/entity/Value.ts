@@ -27,15 +27,53 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
-import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
-import { Operation } from "./Operation";
 
-@Entity()
-export class OCKChangeSet {
-  @ObjectIdColumn()
-  id: ObjectID;
+import { Column } from "typeorm";
+import { Timezone } from "./Timezone";
 
-  @Column(type => Operation)
-  operations?: Operation[];
+export class Value {
+  @Column()
+  schemaVersion: number;
+
+  @Column()
+  uuid: string;
+
+  @Column()
+  index: number;
+
+  @Column()
+  createdDate: number;
+
+  @Column()
+  tags: string[];
+
+  @Column()
+  updatedDate: number;
+
+  @Column()
+  units: number;
+
+  @Column()
+  value: number;
+
+  @Column()
+  type: string;
+
+  @Column()
+  remoteID: string;
+
+  @Column()
+  group: string;
+
+  @Column()
+  source: string;
+
+  @Column((type) => Timezone)
+  timezone: Timezone;
+
+  @Column()
+  kind: string;
+
+  @Column()
+  userInfo: string;
 }

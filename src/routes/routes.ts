@@ -30,23 +30,23 @@
 
 import { Router } from "express";
 import auth from "./auth";
-import changeset from "./changeset";
 import task from "./task";
 import outcome from "./outcome";
 import contact from "./contact";
 import patient from "./patient";
 import careplan from "./careplan";
 import mongo from "./mongoOps";
+import revisionRecord from "./revisionRecord";
 
 const routes = Router();
 
 routes.use("/auth", auth);
-routes.use("/changeset", changeset);
 routes.use("/task", task);
 routes.use("/outcome", outcome);
 routes.use("/contact", contact);
 routes.use("/patient", patient);
 routes.use("/careplan", careplan);
+routes.use("/revisionRecord", revisionRecord);
 routes.use("/mongo", mongo);
 
 export default routes;

@@ -36,7 +36,7 @@ export class SchemaVersion {
 
   @Column()
   minorVersion?: number;
-  
+
   @Column()
   patchNumber?: number;
 }

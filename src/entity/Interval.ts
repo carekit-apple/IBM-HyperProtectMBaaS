@@ -36,19 +36,19 @@ export class Interval {
 
   @Column()
   hour?: number;
-  
+
   @Column()
   second?: number;
-  
+
   @Column()
   day?: number;
-  
+
   @Column()
   month?: number;
-  
+
   @Column()
   year?: number;
-  
+
   @Column()
   weekOfYear?: number;
 }

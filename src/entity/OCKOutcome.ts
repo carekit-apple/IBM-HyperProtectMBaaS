@@ -27,27 +27,27 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
-import { Column, ObjectID, ObjectIdColumn, Entity } from 'typeorm';
-import { Timezone } from './Timezone';
+
+import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
+import { Timezone } from "./Timezone";
 
 @Entity()
 export class OCKOutcome {
-    @ObjectIdColumn()
-    _id:                  ObjectID;
-    
-    @Column()
-    taskOccurrenceIndex?: number;
-    
-    @Column()
-    values?:              any[];
-    
-    @Column()
-    tags?:                string[];
-    
-    @Column(type => Timezone)
-    timezone?:            Timezone;
-    
-    @Column()
-    taskUUID?:            string;
+  @ObjectIdColumn()
+  _id: ObjectID;
+
+  @Column()
+  taskOccurrenceIndex?: number;
+
+  @Column({ array: true })
+  values?: any[];
+
+  @Column({ array: true })
+  tags?: string[];
+
+  @Column((type) => Timezone)
+  timezone?: Timezone;
+
+  @Column()
+  taskUUID?: string;
 }

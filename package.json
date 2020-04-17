@@ -15,6 +15,7 @@
     "@types/helmet": "0.0.42",
     "@types/jsonwebtoken": "^8.3.8",
     "bcryptjs": "^2.4.3",
+    "class-validator": "^0.11.1",
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "errorhandler": "^1.5.1",

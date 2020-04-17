@@ -28,32 +28,13 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Router } from "express";
-import ChangeSetController from '../controllers/ChangeSetController';
-import { validateToken } from "../middleware/validateToken";
-import { validateRole } from "../middleware/validateRole";
+import { Column } from "typeorm";
+import { OCKObject } from "./OCKObject";
 
-const router = Router();
+export class OCKEntity {
+  @Column()
+  type: string;
 
-//Get all changesets (tasks and outcomes) for patient
-router.get(
-  "/",
-  //  [validateToken, validateRole(["patient"])],
-  ChangeSetController.listAll
-);
-
-//Store all changesets (tasks/outcomes) for patient
-router.post(
-  "/",
-  //  [validateToken, validateRole(["patient"])],
-  ChangeSetController.newChangeSet
-);
-
-//Delete all changesets. This is used primarity for testing
-router.delete(
-  "/",
-  //  [validateToken, validateRole(["patient"])],
-  ChangeSetController.deleteChangeSets
-);
-
-export default router;
+  @Column((type) => OCKObject)
+  object: OCKObject;
+}

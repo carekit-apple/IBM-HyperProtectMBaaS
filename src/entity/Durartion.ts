@@ -27,13 +27,13 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 import { Column } from "typeorm";
 
 export class Duration {
   @Column()
-  seconds?: number;
+  seconds: number;
 
   @Column()
-  isAllDay?: boolean;
+  isAllDay: boolean;
 }

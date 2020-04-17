@@ -28,33 +28,52 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
-import { Name } from "./Name";
-import { Timezone } from "./Timezone";
-import { IsNotEmpty } from "class-validator";
+import { Request, Response } from "express";
+import { getRepository } from "typeorm";
+import { OCKRevisionRecord } from "../entity/OCKRevisionRecord";
+//import * as util from "util";
 
-@Entity()
-export class OCKCarePlan {
-  @ObjectIdColumn()
-  _id: ObjectID;
+class RevisionRecordController {
+  static listAll = async (req: Request, res: Response) => {
+    const revisionRecordRepository = getRepository(OCKRevisionRecord);
+    const revisionRecords = await revisionRecordRepository.find();
 
-  @IsNotEmpty()
-  @Column()
-  id: string;
+    //console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
+    res.send(revisionRecords);
+  };
 
-  @IsNotEmpty()
-  @Column((type) => Timezone)
-  timezone: Timezone;
+  static getOneById = async (req: Request, res: Response) => {
+    //todo
+  };
 
-  @IsNotEmpty()
-  @Column((type) => Name)
-  name: Name;
+  static newRevisionRecord = async (req: Request, res: Response) => {
+    const revisionRecordRepository = getRepository(OCKRevisionRecord);
+    try {
+      // console.log(util.inspect(req.body, false, null, true /* enable colors */));
+      const revisionRecord = revisionRecordRepository.create(req.body);
+      await revisionRecordRepository.save(revisionRecord);
+    } catch (e) {
+      res.status(409).send("RevisionRecord exists");
+      return;
+    }
 
-  @IsNotEmpty()
-  @Column()
-  effectiveDate: number;
+    //If all ok, send 201 response
+    res.status(201).send("RevisionRecord stored");
+  };
 
-  @IsNotEmpty()
-  @Column()
-  title: string;
+  // Delete all revisionRecords in the collection
+  static deleteRevisionRecords = async (req: Request, res: Response) => {
+    const revisionRecordRepository = getRepository(OCKRevisionRecord);
+    try {
+      await revisionRecordRepository.deleteMany({});
+    } catch (e) {
+      res.status(409).send("Does not exist");
+      return;
+    }
+
+    //If all ok, send 201 response
+    res.status(201).send("RevisionRecords deleted");
+  };
 }
+
+export default RevisionRecordController;

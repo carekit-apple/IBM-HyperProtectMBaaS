@@ -27,25 +27,25 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
-import { Timezone } from './Timezone';
-import { Name } from './Name';
+import { Timezone } from "./Timezone";
+import { Name } from "./Name";
 
 @Entity()
 export class OCKPatient {
-    @ObjectIdColumn()
-    _id:ObjectID;
+  @ObjectIdColumn()
+  _id: ObjectID;
 
-    @Column()
-    id?:            string;
-    
-    @Column(type => Timezone)
-    timezone?:      Timezone;
+  @Column()
+  id: string;
 
-    @Column(type => Name)
-    name?:          Name;
+  @Column((type) => Timezone)
+  timezone: Timezone;
 
-    @Column()
-    effectiveDate?: number;
+  @Column((type) => Name)
+  name: Name;
+
+  @Column()
+  effectiveDate: number;
 }

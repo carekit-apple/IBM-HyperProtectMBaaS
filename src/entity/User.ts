@@ -36,11 +36,11 @@ export class User {
   id: ObjectID;
 
   @Column()
-  name?: String;
+  name?: string;
 
   @Column()
-  email?: String;
+  email?: string;
 
   @Column()
-  role?: String; // Options : patient, care-provider
+  role?: string; // Options : patient, care-provider
 }

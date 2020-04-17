@@ -32,6 +32,6 @@ import { Column } from "typeorm";
 import { Element } from "./Element";
 
 export class Schedule {
-  @Column(type => Element)
-  elements?: Element[];
+  @Column({ type: Element, array: true })
+  elements: Element[];
 }

@@ -28,33 +28,9 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
-import { Name } from "./Name";
-import { Timezone } from "./Timezone";
-import { IsNotEmpty } from "class-validator";
+import { Column } from "typeorm";
 
-@Entity()
-export class OCKCarePlan {
-  @ObjectIdColumn()
-  _id: ObjectID;
-
-  @IsNotEmpty()
+export class KnowledgeVector {
   @Column()
-  id: string;
-
-  @IsNotEmpty()
-  @Column((type) => Timezone)
-  timezone: Timezone;
-
-  @IsNotEmpty()
-  @Column((type) => Name)
-  name: Name;
-
-  @IsNotEmpty()
-  @Column()
-  effectiveDate: number;
-
-  @IsNotEmpty()
-  @Column()
-  title: string;
+  processes: Array<number | string>;
 }

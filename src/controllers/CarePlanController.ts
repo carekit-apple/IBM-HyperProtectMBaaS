@@ -32,6 +32,7 @@ import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { OCKCarePlan } from "../entity/OCKCarePlan";
 import * as util from "util";
+import { validate } from "class-validator";
 
 class CarePlanController {
   static listAll = async (req: Request, res: Response) => {
@@ -43,21 +44,28 @@ class CarePlanController {
   };
 
   static getOneById = async (req: Request, res: Response) => {
-     //todo
+    //todo
   };
 
   static newCarePlan = async (req: Request, res: Response) => {
     const carePlanRepository = getRepository(OCKCarePlan);
     try {
       const carePlan = carePlanRepository.create(req.body);
+
+      await validate(carePlan).then((errors) => {
+        if (errors.length > 0) {
+          res.status(422).json({ msg: "Invalid JSON Input" });
+          return;
+        }
+      });
       await carePlanRepository.save(carePlan);
     } catch (e) {
-      res.status(409).send("CarePlan exists");
+      res.status(409).json({ msg: "Error saving care plan" });
       return;
     }
 
     //If all ok, send 201 response
-    res.status(201).send("CarePlan stored");
+    res.status(201).json({ msg: "Stored" });
   };
 
   // Delete all carePlans in the collection

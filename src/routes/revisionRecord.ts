@@ -28,33 +28,39 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
-import { Name } from "./Name";
-import { Timezone } from "./Timezone";
-import { IsNotEmpty } from "class-validator";
+import { Router } from "express";
+import RevisionRecordController from "../controllers/RevisionRecordController";
+import { validateToken } from "../middleware/validateToken";
+import { validateRole } from "../middleware/validateRole";
 
-@Entity()
-export class OCKCarePlan {
-  @ObjectIdColumn()
-  _id: ObjectID;
+const router = Router();
 
-  @IsNotEmpty()
-  @Column()
-  id: string;
+//Get all revisionRecords for patient
+router.get(
+  "/",
+  //  [validateToken, validateRole(["patient"])],
+  RevisionRecordController.listAll
+);
 
-  @IsNotEmpty()
-  @Column((type) => Timezone)
-  timezone: Timezone;
+// Get one revisionRecord
+router.get(
+  "/:id([0-9]+)",
+  //  [validateToken, validateRole(["patient"])],
+  RevisionRecordController.getOneById
+);
 
-  @IsNotEmpty()
-  @Column((type) => Name)
-  name: Name;
+//Store revisionRecord for patient
+router.post(
+  "/",
+  //  [validateToken, validateRole(["patient"])],
+  RevisionRecordController.newRevisionRecord
+);
 
-  @IsNotEmpty()
-  @Column()
-  effectiveDate: number;
+//Delete all revisionRecords. This is used primarity for testing
+router.delete(
+  "/",
+  //  [validateToken, validateRole(["patient"])],
+  RevisionRecordController.deleteRevisionRecords
+);
 
-  @IsNotEmpty()
-  @Column()
-  title: string;
-}
+export default router;

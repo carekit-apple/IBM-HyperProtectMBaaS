@@ -1,0 +1,75 @@
+{
+    "knowledgeVector": {
+        "processes": [
+            "F6ADC9C7-EC04-41A6-9256-422E213FBB33",
+            1
+        ]
+    },
+    "entities": [
+        {
+            "type": "task",
+            "object": {
+                "createdDate": 608596819.32600904,
+                "id": "A",
+                "title": "A",
+                "uuid": "55AF922B-3C83-47C7-A031-CE2E3FA50018",
+                "impactsAdherence": true,
+                "updatedDate": 608596819.32600999,
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "effectiveDate": 608532120,
+                "schedule": {
+                    "elements": [
+                        {
+                            "text": "A",
+                            "duration": {
+                                "seconds": 3600,
+                                "isAllDay": false
+                            },
+                            "interval": {
+                                "day": 1
+                            },
+                            "targetValues": [],
+                            "start": 608532120
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "outcome",
+            "object": {
+                "values": [
+                    {
+                        "schemaVersion": null,
+                        "uuid": null,
+                        "index": null,
+                        "createdDate": null,
+                        "tags": null,
+                        "updatedDate": null,
+                        "units": null,
+                        "value": 42,
+                        "type": "integer",
+                        "remoteID": null,
+                        "group": null,
+                        "source": null,
+                        "timezone": {
+                            "identifier": "America\/Sao_Paulo"
+                        },
+                        "kind": null,
+                        "userInfo": null
+                    }
+                ],
+                "createdDate": 608596819.32615197,
+                "uuid": "530E820D-C7D5-439A-B2E3-EDE12FD027E7",
+                "updatedDate": 608596819.32615197,
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "taskUUID": "55AF922B-3C83-47C7-A031-CE2E3FA50018",
+                "taskOccurrenceIndex": 0
+            }
+        }
+    ]
+}

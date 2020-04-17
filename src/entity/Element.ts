@@ -29,27 +29,22 @@
  */
 
 import { Column } from "typeorm";
-
 import { Duration } from "./Durartion";
 import { Interval } from "./Interval";
-import { Timezone } from "./Timezone";
 
 export class Element {
   @Column()
-  text?: string;
+  text: string;
 
-  @Column(type => Duration)
-  duration?: Duration;
+  @Column((type) => Duration)
+  duration: Duration;
 
-  @Column(type => Interval)
-  interval?: Interval;
+  @Column((type) => Interval)
+  interval: Interval;
 
-  @Column()
-  targetValues?: any[];
-
-  @Column(type => Timezone)
-  timezone?: Timezone;
+  @Column({array: true})
+  targetValues: any[];
 
   @Column()
-  start?: number;
+  start: number;
 }

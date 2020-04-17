@@ -32,5 +32,5 @@ import { Column } from "typeorm";
 
 export class Timezone {
   @Column()
-  identifier?: string;
+  identifier: string;
 }

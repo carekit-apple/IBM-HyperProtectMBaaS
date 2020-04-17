@@ -29,15 +29,15 @@
  */
 
 import { Column } from "typeorm";
-import { Entity } from "./Entity";
+import { OCKEntity } from "./OCKEntity";
 
 export class Operation {
-  @Column(type => Entity)
-  entity?: Entity;
+  @Column((type) => OCKEntity)
+  entity: Entity;
 
   @Column()
-  operation?: string;
+  operation: string;
 
   @Column()
-  date?: number;
+  date: number;
 }

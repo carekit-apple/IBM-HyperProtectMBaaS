@@ -27,47 +27,86 @@
  OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
-import { Column, Entity, ObjectID, ObjectIdColumn, } from "typeorm";
+
+import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
 import { SchemaVersion } from "./SchemaVersion";
 import { Schedule } from "./Schedule";
 import { Timezone } from "./Timezone";
+import { IsNotEmpty } from "class-validator";
+
+type UUID = string;
+type Date = number;
+type OCKNote = any[];
+type OCKSemanticVersion = number;
 
 @Entity()
 export class OCKTask {
   @ObjectIdColumn()
-  _id? : ObjectID;
+  _id?: ObjectID;
 
-  @Column(type => SchemaVersion)
+  @Column((type) => SchemaVersion)
   schemaVersion?: SchemaVersion;
 
   @Column()
   createdDate?: number;
 
+  @IsNotEmpty()
   @Column()
-  id?: string;
-
-  @Column()
-  notes?: any[];
+  id: string;
 
   @Column()
-  title?: string;
+  instructions: string;
 
   @Column()
-  uuid?: string;
+  impactsAdherence: boolean;
+
+  @IsNotEmpty()
+  @Column((type) => Schedule)
+  schedule: Schedule;
 
   @Column()
-  impactsAdherence?: boolean;
+  groupIdentifier: string;
 
   @Column()
-  updatedDate?: number;
+  tags: string;
 
-  @Column(type => Timezone)
-  timezone?: Timezone;
+  @IsNotEmpty()
+  @Column()
+  effectiveDate: Date;
 
   @Column()
-  effectiveDate?: number;
+  deletedDate: Date;
 
-  @Column(type => Schedule)
-  schedule?: Schedule;
+  @Column()
+  uuid: UUID;
+
+  @Column()
+  nextVersionUUID: UUID;
+
+  @Column()
+  previousVersionUUID: UUID;
+
+  @Column()
+  createdDate: Date;
+
+  @Column()
+  updatedDate: Date;
+
+  @Column()
+  remoteID: string;
+
+  @Column()
+  source: string;
+
+  @Column()
+  userInfo: Map<string, string>;
+
+  @Column()
+  asset: string;
+
+  @Column({ type: "OCKNote", array: true })
+  notes: OCKNote[]; // TODO
+
+  @Column((type) => Timezone)
+  timezone: Timezone;
 }
