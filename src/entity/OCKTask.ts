@@ -28,85 +28,169 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
-import { SchemaVersion } from "./SchemaVersion";
-import { Schedule } from "./Schedule";
-import { Timezone } from "./Timezone";
-import { IsNotEmpty } from "class-validator";
-
-type UUID = string;
-type Date = number;
-type OCKNote = any[];
-type OCKSemanticVersion = number;
+import { Column, Entity, ObjectIdColumn } from "typeorm";
 
 @Entity()
 export class OCKTask {
   @ObjectIdColumn()
-  _id?: ObjectID;
-
-  @Column((type) => SchemaVersion)
-  schemaVersion?: SchemaVersion;
+  id: ObjectId;
 
   @Column()
-  createdDate?: number;
+  title: string;
 
-  @IsNotEmpty()
+  @Column({ array: true })
+  tags: string[];
+
   @Column()
-  id: string;
+  updatedDate: number;
+
+  @Column()
+  uuid: string;
 
   @Column()
   instructions: string;
 
-  @Column()
-  impactsAdherence: boolean;
-
-  @IsNotEmpty()
   @Column((type) => Schedule)
   schedule: Schedule;
 
-  @Column()
-  groupIdentifier: string;
-
-  @Column()
-  tags: string;
-
-  @IsNotEmpty()
-  @Column()
-  effectiveDate: Date;
-
-  @Column()
-  deletedDate: Date;
-
-  @Column()
-  uuid: UUID;
-
-  @Column()
-  nextVersionUUID: UUID;
-
-  @Column()
-  previousVersionUUID: UUID;
-
-  @Column()
-  createdDate: Date;
-
-  @Column()
-  updatedDate: Date;
+  @Column((type) => UserInfo)
+  userInfo: UserInfo;
 
   @Column()
   remoteID: string;
 
   @Column()
-  source: string;
+  id: string;
 
   @Column()
-  userInfo: Map<string, string>;
+  carePlanUUID: string;
+
+  @Column()
+  nextVersionUUID: string;
 
   @Column()
   asset: string;
 
-  @Column({ type: "OCKNote", array: true })
-  notes: OCKNote[]; // TODO
+  @Column()
+  createdDate: number;
+
+  @Column((type) => SchemaVersion)
+  schemaVersion: SchemaVersion;
+
+  @Column()
+  impactsAdherence: boolean;
 
   @Column((type) => Timezone)
   timezone: Timezone;
+
+  @Column({ type: Note, array: true })
+  notes: Note[];
+
+  @Column()
+  effectiveDate: number;
+
+  @Column()
+  groupIdentifier: string;
+
+  @Column()
+  previousVersionUUID: string;
+
+  @Column()
+  deletedDate: number;
+}
+
+export class Note {
+  @Column()
+  author: string;
+
+  @Column()
+  title: string;
+
+  @Column()
+  content: string;
+
+  @Column((type) => Timezone)
+  timezone: Timezone;
+}
+
+export class Timezone {
+  @Column()
+  identifier: string;
+}
+
+export class Schedule {
+  @Column({ type: Element, array: true })
+  elements: Element[];
+}
+
+export class Element {
+  @Column()
+  text: string;
+
+  @Column((type) => Duration)
+  duration: Duration;
+
+  @Column((type) => Interval)
+  interval: Interval;
+
+  @Column()
+  targetValues: any[];
+
+  @Column((type) => Timezone)
+  timezone: Timezone;
+
+  @Column()
+  start: number;
+}
+
+export class Duration {
+  @Column()
+  seconds: number;
+
+  @Column()
+  isAllDay: boolean;
+}
+
+export class Interval {
+  @Column()
+  minute: number;
+
+  @Column()
+  hour: number;
+
+  @Column()
+  second: number;
+
+  @Column()
+  day: number;
+
+  @Column()
+  month: number;
+
+  @Column()
+  year: number;
+
+  @Column()
+  weekOfYear: number;
+}
+
+export class Timezone {
+  @Column()
+  identifier: string;
+}
+
+export class SchemaVersion {
+  @Column()
+  majorVersion: number;
+
+  @Column()
+  minorVersion: number;
+
+  @Column()
+  patchNumber: number;
+}
+
+export class UserInfo {
+  @Column()
+  user: string;
 }

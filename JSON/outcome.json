@@ -1,11 +1,58 @@
 {
-    "taskOccurrenceIndex": 0,
-    "values": [],
+    "uuid": "D1E7EC7D-5D06-482F-895E-CA3C33ADA93A",
+    "createdDate": 608921035.78875196,
     "tags": [
-        "123"
+        "tag1",
+        "tag2"
+    ],
+    "updatedDate": 608921035.78875196,
+    "source": "source",
+    "values": [
+        {
+            "schemaVersion": null,
+            "uuid": "uuid",
+            "index": 42,
+            "createdDate": 608921035.78856301,
+            "tags": [
+                "string1",
+                "string2"
+            ],
+            "updatedDate": 608921035.78856311,
+            "units": "units",
+            "value": 42,
+            "type": "integer",
+            "remoteID": "remoteID",
+            "group": "groupIdentifier",
+            "source": "source",
+            "timezone": {
+                "identifier": "America\/Sao_Paulo"
+            },
+            "kind": "kind",
+            "userInfo": {
+                "user": "info"
+            }
+        }
+    ],
+    "taskUUID": "C27C2558-1C53-4699-9DB1-5A045A4D6D3A",
+    "remoteID": "remoteID",
+    "taskOccurrenceIndex": 1,
+    "asset": "asset",
+    "groupIdentifier": "groupIdentifier",
+    "deletedDate": 608921036.78875196,
+    "notes": [
+        {
+            "author": "author",
+            "title": "title",
+            "content": "content",
+            "timezone": {
+                "identifier": "America\/Sao_Paulo"
+            }
+        }
     ],
     "timezone": {
         "identifier": "America\/Sao_Paulo"
     },
-    "taskUUID": "FCB5E291-12FF-41CD-A855-F61A7359DBAA"
+    "userInfo": {
+        "user": "info"
+    }
 }
