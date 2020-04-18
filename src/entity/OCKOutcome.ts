@@ -32,57 +32,6 @@ import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
 import { Timezone } from "./Timezone";
 import { SchemaVersion } from "./SchemaVersion";
 
-@Entity()
-export class OCKOutcome {
-  @ObjectIdColumn()
-  id: ObjectID;
-
-  @Column()
-  uuid: string;
-
-  @Column()
-  createdDate: number;
-
-  @Column({ array: true })
-  tags: string[];
-
-  @Column()
-  updatedDate: number;
-
-  @Column()
-  source: string;
-
-  @Column({ type: Value, array: true })
-  values: Value[];
-
-  @Column()
-  taskUUID: string;
-
-  @Column()
-  remoteID: string;
-
-  @Column()
-  taskOccurrenceIndex: number;
-
-  @Column()
-  asset: string;
-
-  @Column()
-  groupIdentifier: string;
-
-  @Column()
-  deletedDate: number;
-
-  @Column({ type: Note, array: true })
-  notes: Note[];
-
-  @Column((type) => Timezone)
-  timezone: Timezone;
-
-  @Column((type) => UserInfo)
-  userInfo: UserInfo;
-}
-
 export class Note {
   @Column()
   author: string;
@@ -145,6 +94,57 @@ export class Value {
   @Column()
   kind: string;
 
+  @Column((type) => UserInfo)
+  userInfo: UserInfo;
+}
+
+@Entity()
+export class OCKOutcome {
+  @ObjectIdColumn()
+  id: ObjectID;
+
   @Column()
+  uuid: string;
+
+  @Column()
+  createdDate: number;
+
+  @Column({ array: true })
+  tags: string[];
+
+  @Column()
+  updatedDate: number;
+
+  @Column()
+  source: string;
+
+  @Column({ type: Value, array: true })
+  values: Value[];
+
+  @Column()
+  taskUUID: string;
+
+  @Column()
+  remoteID: string;
+
+  @Column()
+  taskOccurrenceIndex: number;
+
+  @Column()
+  asset: string;
+
+  @Column()
+  groupIdentifier: string;
+
+  @Column()
+  deletedDate: number;
+
+  @Column({ type: Note, array: true })
+  notes: Note[];
+
+  @Column((type) => Timezone)
+  timezone: Timezone;
+
+  @Column((type) => UserInfo)
   userInfo: UserInfo;
 }

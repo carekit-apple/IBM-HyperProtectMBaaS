@@ -31,7 +31,8 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { OCKRevisionRecord } from "../entity/OCKRevisionRecord";
-//import * as util from "util";
+import { OCKTask } from "../entity/OCKTask";
+import { OCKOutcome } from "../entity/OCKOutcome";
 
 class RevisionRecordController {
   static listAll = async (req: Request, res: Response) => {
@@ -47,13 +48,50 @@ class RevisionRecordController {
   };
 
   static newRevisionRecord = async (req: Request, res: Response) => {
+    const revRecord = req.body as OCKRevisionRecord;
     const revisionRecordRepository = getRepository(OCKRevisionRecord);
+
     try {
-      // console.log(util.inspect(req.body, false, null, true /* enable colors */));
-      const revisionRecord = revisionRecordRepository.create(req.body);
+      const revisionRecord = revisionRecordRepository.create(revRecord);
       await revisionRecordRepository.save(revisionRecord);
+
+      for (let [i, entity] of revRecord.entities.entries()) {
+        switch (entity.type) {
+          case "task":
+            const taskRepository = getRepository(OCKTask);
+            try {
+              const task = taskRepository.create(entity.object);
+              await taskRepository.save(task);
+            } catch (e) {
+              res.status(409).send("Task exists");
+              return;
+            }
+            break;
+          case "outcome": {
+            const outcomeRepository = getRepository(OCKOutcome);
+            try {
+              const outcome = outcomeRepository.create(entity.object);
+              await outcomeRepository.save(outcome);
+            } catch (e) {
+              res.status(409).send("Error storing outcome");
+              return;
+            }
+            break;
+          }
+          case "careplan":
+          case "contact":
+          case "patient": {
+            res.status(501).send("Unimplemented");
+            break;
+          }
+          default: {
+            res.status(400).send("Bad request");
+            break;
+          }
+        }
+      }
     } catch (e) {
-      res.status(409).send("RevisionRecord exists");
+      res.status(409).send("Error processing request");
       return;
     }
 

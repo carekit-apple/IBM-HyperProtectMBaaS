@@ -9,20 +9,18 @@
         {
             "type": "task",
             "object": {
-                "createdDate": 608596819.32600904,
-                "id": "A",
-                "title": "A",
-                "uuid": "55AF922B-3C83-47C7-A031-CE2E3FA50018",
-                "impactsAdherence": true,
-                "updatedDate": 608596819.32600999,
-                "timezone": {
-                    "identifier": "America\/Sao_Paulo"
-                },
-                "effectiveDate": 608532120,
+                "title": "title",
+                "tags": [
+                    "tag",
+                    "tag2"
+                ],
+                "updatedDate": 608921849.74262798,
+                "uuid": "09844E39-A9F9-4678-B588-F93BE68B01A7",
+                "instructions": "instructions",
                 "schedule": {
                     "elements": [
                         {
-                            "text": "A",
+                            "text": "Breakfast",
                             "duration": {
                                 "seconds": 3600,
                                 "isAllDay": false
@@ -31,44 +29,127 @@
                                 "day": 1
                             },
                             "targetValues": [],
-                            "start": 608532120
+                            "start": 608898600
+                        },
+                        {
+                            "text": "Lunch",
+                            "duration": {
+                                "seconds": 3600,
+                                "isAllDay": false
+                            },
+                            "interval": {
+                                "day": 1
+                            },
+                            "targetValues": [],
+                            "start": 608914800
+                        },
+                        {
+                            "text": "Dinner",
+                            "duration": {
+                                "seconds": 3600,
+                                "isAllDay": false
+                            },
+                            "interval": {
+                                "day": 1
+                            },
+                            "targetValues": [],
+                            "start": 608934600
                         }
                     ]
-                }
+                },
+                "userInfo": {
+                    "user": "info"
+                },
+                "remoteID": "remoteID",
+                "id": "id",
+                "carePlanUUID": "EEAEB642-D2A9-4B4D-966E-DF23B6B6755C",
+                "nextVersionUUID": "69E2E484-1CE0-4FC2-9607-641C3424B3AE",
+                "asset": "asset",
+                "createdDate": 608921849.74262798,
+                "schemaVersion": {
+                    "majorVersion": 3,
+                    "minorVersion": 0,
+                    "patchNumber": 1
+                },
+                "impactsAdherence": true,
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "notes": [
+                    {
+                        "author": "author",
+                        "title": "title",
+                        "content": "content",
+                        "timezone": {
+                            "identifier": "America\/Sao_Paulo"
+                        }
+                    }
+                ],
+                "effectiveDate": 608921849.74263,
+                "groupIdentifier": "groupIdentifier",
+                "previousVersionUUID": "97925E4C-A35D-417E-A5DA-3E6556E72710",
+                "deletedDate": 608921849.74262905
             }
         },
         {
             "type": "outcome",
             "object": {
+                "uuid": "4318A945-0924-47B8-A41C-66957780EB0F",
+                "createdDate": 608921849.74319994,
+                "tags": [
+                    "tag1",
+                    "tag2"
+                ],
+                "updatedDate": 608921849.74319994,
+                "source": "source",
                 "values": [
                     {
                         "schemaVersion": null,
                         "uuid": null,
-                        "index": null,
-                        "createdDate": null,
-                        "tags": null,
+                        "index": 42,
+                        "createdDate": 608921849.74305701,
+                        "tags": [
+                            "string1",
+                            "string2"
+                        ],
                         "updatedDate": null,
-                        "units": null,
+                        "units": "units",
                         "value": 42,
                         "type": "integer",
                         "remoteID": null,
-                        "group": null,
-                        "source": null,
+                        "group": "groupIdentifier",
+                        "source": "source",
                         "timezone": {
                             "identifier": "America\/Sao_Paulo"
                         },
-                        "kind": null,
-                        "userInfo": null
+                        "kind": "king",
+                        "userInfo": {
+                            "user": "info"
+                        }
                     }
                 ],
-                "createdDate": 608596819.32615197,
-                "uuid": "530E820D-C7D5-439A-B2E3-EDE12FD027E7",
-                "updatedDate": 608596819.32615197,
+                "taskUUID": "09844E39-A9F9-4678-B588-F93BE68B01A7",
+                "remoteID": "remoteID",
+                "taskOccurrenceIndex": 1,
+                "asset": "asset",
+                "groupIdentifier": "groupIdentifier",
+                "deletedDate": 608921850.74319994,
+                "notes": [
+                    {
+                        "author": "author",
+                        "title": "title",
+                        "content": "content",
+                        "timezone": {
+                            "identifier": "America\/Sao_Paulo"
+                        }
+                    }
+                ],
                 "timezone": {
                     "identifier": "America\/Sao_Paulo"
                 },
-                "taskUUID": "55AF922B-3C83-47C7-A031-CE2E3FA50018",
-                "taskOccurrenceIndex": 0
+                "userInfo": {
+                    "user": "info"
+                }
             }
         }
     ]

@@ -29,6 +29,92 @@
  */
 
 import { Column, Entity, ObjectIdColumn } from "typeorm";
+import { Timezone } from "./Timezone";
+
+export class Note {
+  @Column()
+  author: string;
+
+  @Column()
+  title: string;
+
+  @Column()
+  content: string;
+
+  @Column((type) => Timezone)
+  timezone: Timezone;
+}
+
+export class Interval {
+  @Column()
+  minute: number;
+
+  @Column()
+  hour: number;
+
+  @Column()
+  second: number;
+
+  @Column()
+  day: number;
+
+  @Column()
+  month: number;
+
+  @Column()
+  year: number;
+
+  @Column()
+  weekOfYear: number;
+}
+
+export class SchemaVersion {
+  @Column()
+  majorVersion: number;
+
+  @Column()
+  minorVersion: number;
+
+  @Column()
+  patchNumber: number;
+}
+
+export class UserInfo {
+  @Column()
+  user: string;
+}
+
+export class Duration {
+  @Column()
+  seconds: number;
+
+  @Column()
+  isAllDay: boolean;
+}
+export class Element {
+  @Column()
+  text: string;
+
+  @Column((type) => Duration)
+  duration: Duration;
+
+  @Column((type) => Interval)
+  interval: Interval;
+
+  @Column()
+  targetValues: any[];
+
+  @Column((type) => Timezone)
+  timezone: Timezone;
+
+  @Column()
+  start: number;
+}
+
+export class Schedule {
+  @Column({ type: Element, array: true })
+  elements: Element[];
+}
 
 @Entity()
 export class OCKTask {
@@ -97,100 +183,4 @@ export class OCKTask {
 
   @Column()
   deletedDate: number;
-}
-
-export class Note {
-  @Column()
-  author: string;
-
-  @Column()
-  title: string;
-
-  @Column()
-  content: string;
-
-  @Column((type) => Timezone)
-  timezone: Timezone;
-}
-
-export class Timezone {
-  @Column()
-  identifier: string;
-}
-
-export class Schedule {
-  @Column({ type: Element, array: true })
-  elements: Element[];
-}
-
-export class Element {
-  @Column()
-  text: string;
-
-  @Column((type) => Duration)
-  duration: Duration;
-
-  @Column((type) => Interval)
-  interval: Interval;
-
-  @Column()
-  targetValues: any[];
-
-  @Column((type) => Timezone)
-  timezone: Timezone;
-
-  @Column()
-  start: number;
-}
-
-export class Duration {
-  @Column()
-  seconds: number;
-
-  @Column()
-  isAllDay: boolean;
-}
-
-export class Interval {
-  @Column()
-  minute: number;
-
-  @Column()
-  hour: number;
-
-  @Column()
-  second: number;
-
-  @Column()
-  day: number;
-
-  @Column()
-  month: number;
-
-  @Column()
-  year: number;
-
-  @Column()
-  weekOfYear: number;
-}
-
-export class Timezone {
-  @Column()
-  identifier: string;
-}
-
-export class SchemaVersion {
-  @Column()
-  majorVersion: number;
-
-  @Column()
-  minorVersion: number;
-
-  @Column()
-  patchNumber: number;
-}
-
-export class UserInfo {
-  @Column()
-  user: string;
 }
