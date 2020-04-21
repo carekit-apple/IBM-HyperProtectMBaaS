@@ -29,28 +29,36 @@
  */
 
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { getRepository, getMongoRepository } from "typeorm";
 import { OCKRevisionRecord } from "../entity/OCKRevisionRecord";
 import { OCKTask } from "../entity/OCKTask";
 import { OCKOutcome } from "../entity/OCKOutcome";
+import * as util from "util";
+import { isNullOrUndefined } from "util";
 
 class RevisionRecordController {
   static listAll = async (req: Request, res: Response) => {
+    const clock = isNullOrUndefined(req.query.clock) ? 0 : req.query.clock;
     const revisionRecordRepository = getRepository(OCKRevisionRecord);
-    const revisionRecords = await revisionRecordRepository.find();
-
-    //console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
-    res.send(revisionRecords);
+    const revisionRecords = await revisionRecordRepository.findOne({ "knowledgeVector.processes.1": { $gt: clock } });
+    console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
+    res.send(isNullOrUndefined(revisionRecords) ? [] : revisionRecords);
   };
 
   static getOneById = async (req: Request, res: Response) => {
-    //todo
+    const clock = isNullOrUndefined(req.query.clock) ? 0 : req.query.clock;
+    const revisionRecordRepository = getRepository(OCKRevisionRecord);
+    const revisionRecords = await revisionRecordRepository.find();
+
+    console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
+    res.send(isNullOrUndefined(revisionRecords) ? {} : revisionRecords);
   };
 
   static newRevisionRecord = async (req: Request, res: Response) => {
     const revRecord = req.body as OCKRevisionRecord;
     const revisionRecordRepository = getRepository(OCKRevisionRecord);
 
+    console.log(util.inspect(revRecord, false, null, true /* enable colors */));
     try {
       const revisionRecord = revisionRecordRepository.create(revRecord);
       await revisionRecordRepository.save(revisionRecord);
@@ -58,7 +66,7 @@ class RevisionRecordController {
       for (let [i, entity] of revRecord.entities.entries()) {
         switch (entity.type) {
           case "task":
-            const taskRepository = getRepository(OCKTask);
+            const taskRepository = getMongoRepository(OCKTask);
             try {
               const task = taskRepository.create(entity.object);
               await taskRepository.save(task);
@@ -68,7 +76,7 @@ class RevisionRecordController {
             }
             break;
           case "outcome": {
-            const outcomeRepository = getRepository(OCKOutcome);
+            const outcomeRepository = getMongoRepository(OCKOutcome);
             try {
               const outcome = outcomeRepository.create(entity.object);
               await outcomeRepository.save(outcome);
@@ -101,11 +109,12 @@ class RevisionRecordController {
 
   // Delete all revisionRecords in the collection
   static deleteRevisionRecords = async (req: Request, res: Response) => {
-    const revisionRecordRepository = getRepository(OCKRevisionRecord);
     try {
-      await revisionRecordRepository.deleteMany({});
+      await getMongoRepository(OCKRevisionRecord).deleteMany({});
+      await getMongoRepository(OCKTask).deleteMany({});
+      await getMongoRepository(OCKOutcome).deleteMany({});
     } catch (e) {
-      res.status(409).send("Does not exist");
+      res.status(201).send("Does not exist");
       return;
     }
 

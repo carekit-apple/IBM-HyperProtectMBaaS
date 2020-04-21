@@ -38,7 +38,6 @@ class TaskController {
     const taskRepository = getRepository(OCKTask);
     const tasks = await taskRepository.find();
 
-    //console.log(util.inspect(tasks, false, null, true /* enable colors */));
     res.send(tasks);
   };
 
@@ -49,7 +48,6 @@ class TaskController {
   static newTask = async (req: Request, res: Response) => {
     const taskRepository = getRepository(OCKTask);
     try {
-      // console.log(util.inspect(req.body, false, null, true /* enable colors */));
       const task = taskRepository.create(req.body);
       await taskRepository.save(task);
     } catch (e) {

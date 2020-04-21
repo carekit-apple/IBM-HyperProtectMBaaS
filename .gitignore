@@ -7,3 +7,4 @@ src/migration/*
 *.pem
 *.crt
 *.ppk
+.idea/*

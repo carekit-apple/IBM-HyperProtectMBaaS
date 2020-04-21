@@ -29,7 +29,7 @@
  */
 
 import { Router } from "express";
-import CarePlanController from '../controllers/CarePlanController';
+import CarePlanController from "../controllers/CarePlanController";
 import { validateToken } from "../middleware/validateToken";
 import { validateRole } from "../middleware/validateRole";
 
