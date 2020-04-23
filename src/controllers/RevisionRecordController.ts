@@ -34,16 +34,26 @@ import { OCKRevisionRecord } from "../entity/OCKRevisionRecord";
 import { OCKTask } from "../entity/OCKTask";
 import { OCKOutcome } from "../entity/OCKOutcome";
 import * as util from "util";
-import { isNullOrUndefined } from "util";
+import { isUndefined} from "util";
+import {createOrIncrementClock, uuid, constructLatestKnowledgeVector, getLatestKnowledgeVector} from "../utils";
+import { KnowledgeVector } from "../entity/KnowledgeVector";
 
 class RevisionRecordController {
   static listAll = async (req: Request, res: Response) => {
-    const clock = isNullOrUndefined(req.query.clock) ? 0 : req.query.clock;
+    const clock = Number(isUndefined(req.query.clock) ? 0 : req.query.clock);
     const revisionRecordRepository = getRepository(OCKRevisionRecord);
-    const revisionRecords = await revisionRecordRepository.findOne({ "knowledgeVector.processes.1": { $gt: clock } });
-    console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
-    res.send(isNullOrUndefined(revisionRecords) ? [] : revisionRecords);
-  };
+    const revisionRecords: OCKRevisionRecord[] = await revisionRecordRepository.find({"knowledgeVector.processes.clock": {$gte: clock}});
+    let returnRevRecord = new OCKRevisionRecord();
+    returnRevRecord.entities = [];
+
+    // merge revision records greater than clock, but use clock of thee newest record
+    for (let entity of revisionRecords) {
+      entity.entities.map((entity) => returnRevRecord.entities.push(entity));
+    }
+    returnRevRecord.knowledgeVector = await getLatestKnowledgeVector();
+    console.log(util.inspect(returnRevRecord.knowledgeVector , false, null, true /* enable colors */));
+    res.status(201).send(returnRevRecord);
+  }
 
   static getOneById = async (req: Request, res: Response) => {
     const clock = isNullOrUndefined(req.query.clock) ? 0 : req.query.clock;
@@ -68,18 +78,29 @@ class RevisionRecordController {
           case "task":
             const taskRepository = getMongoRepository(OCKTask);
             try {
-              const task = taskRepository.create(entity.object);
-              await taskRepository.save(task);
+              const taskExists = await taskRepository.findOne({ uuid: entity.object.uuid });
+              // if task exists, don't add
+              if (isUndefined(taskExists)) {
+                const task = taskRepository.create(entity.object);
+                await taskRepository.save(task);
+                await createOrIncrementClock();
+              }
             } catch (e) {
               res.status(409).send("Task exists");
               return;
             }
             break;
           case "outcome": {
+            // todo : deleted outcomes (if an outcome has the same taskUUID and taskOccurrenceIndex as existing outcome, replace existing)
             const outcomeRepository = getMongoRepository(OCKOutcome);
             try {
-              const outcome = outcomeRepository.create(entity.object);
-              await outcomeRepository.save(outcome);
+              const outcomeExists = await outcomeRepository.findOne({ uuid: entity.object.uuid });
+              // if outcome exists, don't add
+              if (isUndefined(outcomeExists)) {
+                const outcome = outcomeRepository.create(entity.object);
+                await outcomeRepository.save(outcome);
+                await createOrIncrementClock();
+              }
             } catch (e) {
               res.status(409).send("Error storing outcome");
               return;

@@ -28,22 +28,36 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {Column, Entity, ObjectID, ObjectIdColumn} from "typeorm";
+import { KnowledgeVector, Process } from "./entity/KnowledgeVector";
+import { getMongoRepository } from "typeorm";
+import { isUndefined } from "util";
 
-export class Process {
-  @Column()
-  id : string;
+// FIXME : For testing until good typescript uuid es6 compatable library is available
+export const uuid = "ADADC9C7-EC04-41A6-9256-422E213FBB33";
 
-  @Column()
-  clock : number;
+// This is used when we connect to Mongo or from put operations. Since merge operations are idempotent, its safe to increment this conservatively
+export async function createOrIncrementClock() {
+  let repo = getMongoRepository(KnowledgeVector);
+  let kvExists = await repo.findOne({ "processes.id": uuid });
+  if (isUndefined(kvExists)) await repo.insertOne(kv);
+  else {
+    let kv = new KnowledgeVector();
+    kv.processes = [];
+    let process = new Process();
+    kv.processes.push(process);
+    process.clock = 1;
+    process.id = uuid;
+    await repo.updateOne({ "processes.id": uuid }, { $inc: { "processes.$[].clock": 1 } }, { upsert: true });
+  }
 }
 
-@Entity()
-export class KnowledgeVector {
-  @ObjectIdColumn()
-  _id : ObjectID;
-
-  @Column({type : Process, array : true})
-  processes: Process[];
+export async function getLatestKnowledgeVector(): KnowledgeVector {
+  const kvExists = await getMongoRepository(KnowledgeVector).findOne({ "processes.id": uuid });
+  console.assert(!isUndefined(kvExists), "Knowledge Vector should never be null");
+  return kvExists;
 }
-
+// Given a an array of knowledge vectors, returns a vector with the latest clocks for the processes
+export async function constructLatestKnowledgeVector(kvectors: KnowledgeVector[]) {
+  for (let kv in kvectors) {
+  }
+}

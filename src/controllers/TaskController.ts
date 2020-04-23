@@ -31,7 +31,6 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 import { OCKTask } from "../entity/OCKTask";
-import * as util from "util";
 
 class TaskController {
   static listAll = async (req: Request, res: Response) => {

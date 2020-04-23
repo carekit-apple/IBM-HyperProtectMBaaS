@@ -28,7 +28,7 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, Entity, ObjectIdColumn } from "typeorm";
+import { Column, Entity, ObjectIdColumn, ObjectID } from "typeorm";
 import { Timezone } from "./Timezone";
 
 export class Note {
@@ -119,7 +119,7 @@ export class Schedule {
 @Entity()
 export class OCKTask {
   @ObjectIdColumn()
-  id: ObjectId;
+  id: ObjectID;
 
   @Column()
   title: string;
