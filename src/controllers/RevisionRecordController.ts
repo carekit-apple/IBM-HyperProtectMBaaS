@@ -34,34 +34,46 @@ import { OCKRevisionRecord } from "../entity/OCKRevisionRecord";
 import { OCKTask } from "../entity/OCKTask";
 import { OCKOutcome } from "../entity/OCKOutcome";
 import * as util from "util";
-import { isUndefined} from "util";
-import {createOrIncrementClock, uuid, constructLatestKnowledgeVector, getLatestKnowledgeVector} from "../utils";
-import { KnowledgeVector } from "../entity/KnowledgeVector";
+import { isUndefined } from "util";
+import {
+  createOrIncrementClock,
+  getLatestKnowledgeVector,
+  isOutcomeNew,
+  deleteExistingOutcomeForUpdate,
+} from "../utils";
 
 class RevisionRecordController {
   static listAll = async (req: Request, res: Response) => {
     const clock = Number(isUndefined(req.query.clock) ? 0 : req.query.clock);
     const revisionRecordRepository = getRepository(OCKRevisionRecord);
-    const revisionRecords: OCKRevisionRecord[] = await revisionRecordRepository.find({"knowledgeVector.processes.clock": {$gte: clock}});
+    //const revisionRecords: OCKRevisionRecord[] = await revisionRecordRepository.find({"knowledgeVector.processes.clock": {$gte: clock}});
+
+    // FIXME : send only latest rev record
+    const revisionRecords: OCKRevisionRecord[] = await revisionRecordRepository.find({
+      $query: {},
+      $orderby: { "knowledgeVector.processes.clock": -1 },
+    });
+    //console.log(util.inspect(revisionRecords , false, null, true /* enable colors */));
+
     let returnRevRecord = new OCKRevisionRecord();
     returnRevRecord.entities = [];
 
     // merge revision records greater than clock, but use clock of thee newest record
-    for (let entity of revisionRecords) {
-      entity.entities.map((entity) => returnRevRecord.entities.push(entity));
-    }
+    // for (let entity of revisionRecords) {
+    //   entity.entities.map((entity) => returnRevRecord.entities.push(entity));
+    // }
     returnRevRecord.knowledgeVector = await getLatestKnowledgeVector();
-    console.log(util.inspect(returnRevRecord.knowledgeVector , false, null, true /* enable colors */));
-    res.status(201).send(returnRevRecord);
-  }
+    //console.log(util.inspect(revisionRecords.length == 0 ? returnRevRecord : revisionRecords[revisionRecords.length-1], false, null, true /* enable colors */));
+    res.status(201).send(revisionRecords.length == 0 ? returnRevRecord : revisionRecords[revisionRecords.length - 1]);
+  };
 
   static getOneById = async (req: Request, res: Response) => {
-    const clock = isNullOrUndefined(req.query.clock) ? 0 : req.query.clock;
+    const clock = isUndefined(req.query.clock) ? 0 : req.query.clock;
     const revisionRecordRepository = getRepository(OCKRevisionRecord);
     const revisionRecords = await revisionRecordRepository.find();
 
     console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
-    res.send(isNullOrUndefined(revisionRecords) ? {} : revisionRecords);
+    res.send(isUndefined(revisionRecords) ? {} : revisionRecords);
   };
 
   static newRevisionRecord = async (req: Request, res: Response) => {
@@ -73,13 +85,13 @@ class RevisionRecordController {
       const revisionRecord = revisionRecordRepository.create(revRecord);
       await revisionRecordRepository.save(revisionRecord);
 
-      for (let [i, entity] of revRecord.entities.entries()) {
+      for (let entity of revRecord.entities) {
         switch (entity.type) {
           case "task":
             const taskRepository = getMongoRepository(OCKTask);
             try {
               const taskExists = await taskRepository.findOne({ uuid: entity.object.uuid });
-              // if task exists, don't add
+              // if task exists, don't overwrite
               if (isUndefined(taskExists)) {
                 const task = taskRepository.create(entity.object);
                 await taskRepository.save(task);
@@ -91,11 +103,14 @@ class RevisionRecordController {
             }
             break;
           case "outcome": {
-            // todo : deleted outcomes (if an outcome has the same taskUUID and taskOccurrenceIndex as existing outcome, replace existing)
             const outcomeRepository = getMongoRepository(OCKOutcome);
+            // if this is an update, delete old version
+            if (!(await isOutcomeNew(entity.object))) {
+              await deleteExistingOutcomeForUpdate(entity.object);
+            }
             try {
               const outcomeExists = await outcomeRepository.findOne({ uuid: entity.object.uuid });
-              // if outcome exists, don't add
+              // if outcome exists, don't overwrite. Update scenario was handled above
               if (isUndefined(outcomeExists)) {
                 const outcome = outcomeRepository.create(entity.object);
                 await outcomeRepository.save(outcome);

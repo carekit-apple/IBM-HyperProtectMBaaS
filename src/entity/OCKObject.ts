@@ -22,7 +22,7 @@ export class OCKObject {
   @Column()
   updatedDate: number;
 
-  @Column((typee) => Timezone)
+  @Column((type) => Timezone)
   timezone: Timezone;
 
   @Column()

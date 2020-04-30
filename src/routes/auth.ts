@@ -28,12 +28,10 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
- import { Router } from "express";
+import { Router } from "express";
 import AuthController from "../controllers/AuthController";
 
 const router = Router();
-//Create account
-router.post("/new-account", AuthController.login);
 
 //Login route
 router.post("/login", AuthController.login);

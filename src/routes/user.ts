@@ -28,67 +28,26 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { OCKChangeSet } from "../entity/OKCChangeSet";
-import * as util from "util";
+import { Router } from "express";
+import UserController from "../controllers/UserController";
+import { validateToken } from "../middleware/validateToken";
+import { validateRole } from "../middleware/validateRole";
 
-class ChangeSetController {
-  static listAll = async (req: Request, res: Response) => {
-    const changeSetRepository = getRepository(OCKChangeSet);
-    const changeSets = await changeSetRepository.find();
+const router = Router();
 
-    console.log(
-      util.inspect(
-        changeSets[0].operations[0].operation,
-        false,
-        null,
-        true /* enable colors */
-      )
-    );
+//Get all users
+router.get("/", [validateToken, validateRole(["admin"])], UserController.listAll);
 
-    res.send(changeSets);
-  };
+// Get one user
+router.get("/:id([0-9]+)", [validateToken, validateRole(["admin"])], UserController.getOneById);
 
-  static getOneById = async (req: Request, res: Response) => {
-     //todo
-  };
+//Create a new user
+router.post("/", /*[validateToken, validateRole(["admin"])],*/ UserController.newUser);
 
-  static newChangeSet = async (req: Request, res: Response) => {
-    const changeSetRepository = getRepository(OCKChangeSet);
-    try {
-      console.log(
-        util.inspect(
-          req.body,
-          false,
-          null,
-          true /* enable colors */
-        )
-      );
+//Edit one user
+router.patch("/:id([0-9]+)", [validateToken, validateRole(["admin"])], UserController.editUser);
 
-      await changeSetRepository.save(req.body);
-    } catch (e) {
-      res.status(409).send("Changeset exists");
-      return;
-    }
+//Delete one user
+router.delete("/:id([0-9]+)", [validateToken, validateRole(["admin"])], UserController.deleteUser);
 
-    //If all ok, send 201 response
-    res.status(201).send("Changeset stored");
-  };
-
-  // Delete all changeSets in the collection
-  static deleteChangeSets = async (req: Request, res: Response) => {
-    const changeSetRepository = getRepository(OCKChangeSet);
-    try {
-      await changeSetRepository.deleteMany({});
-    } catch (e) {
-      res.status(409).send("Does not exist");
-      return;
-    }
-
-    //If all ok, send 201 response
-    res.status(201).send("ChangeSets deleted");
-  };
-}
-
-export default ChangeSetController;
+export default router;

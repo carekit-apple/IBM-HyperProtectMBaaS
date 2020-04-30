@@ -28,7 +28,9 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, UpdateDateColumn } from "typeorm";
+import * as bcrypt from "bcryptjs";
+import { IsNotEmpty } from "class-validator";
 
 @Entity()
 export class User {
@@ -36,11 +38,31 @@ export class User {
   id: ObjectID;
 
   @Column()
+  @IsNotEmpty()
   name?: string;
 
   @Column()
   email?: string;
 
   @Column()
+  password: string;
+
+  @Column()
   role?: string; // Options : patient, care-provider
+
+  @Column()
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column()
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  hashPassword() {
+    this.password = bcrypt.hashSync(this.password, 8);
+  }
+
+  checkIfUnencryptedPasswordIsValid(unencryptedPassword: string) {
+    return bcrypt.compareSync(unencryptedPassword, this.password);
+  }
 }

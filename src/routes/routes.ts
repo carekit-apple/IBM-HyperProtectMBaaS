@@ -37,6 +37,7 @@ import patient from "./patient";
 import careplan from "./careplan";
 import mongo from "./mongoOps";
 import revisionRecord from "./revisionRecord";
+import user from "./user";
 
 const routes = Router();
 
@@ -48,5 +49,6 @@ routes.use("/patient", patient);
 routes.use("/careplan", careplan);
 routes.use("/revisionRecord", revisionRecord);
 routes.use("/mongo", mongo);
+routes.use("/user", user);
 
 export default routes;

@@ -30,12 +30,13 @@
 
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import * as express from "express";
-import * as helmet from "helmet";
-import * as morgan from "morgan";
-import * as cors from "cors";
+import express from "express";
+import helmet from "helmet";
+import morgan = require("morgan");
+import cors from "cors";
 import routes from "./routes/routes";
-import * as config from "config";
+import config = require("config");
+
 import { createOrIncrementClock } from "./utils";
 
 //import * as fs from "fs";

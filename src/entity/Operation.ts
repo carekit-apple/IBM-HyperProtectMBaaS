@@ -33,7 +33,7 @@ import { OCKEntity } from "./OCKEntity";
 
 export class Operation {
   @Column((type) => OCKEntity)
-  entity: Entity;
+  entity: OCKEntity;
 
   @Column()
   operation: string;

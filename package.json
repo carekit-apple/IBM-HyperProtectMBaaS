@@ -1,33 +1,33 @@
 {
-  "name": "jwt-express-typeorm",
+  "name": "hyper-protect-sdk-backend",
   "version": "0.0.1",
-  "description": "Awesome project developed with TypeORM.",
+  "description": "Backend for Hyper Protect SDK for iOS",
   "devDependencies": {
-    "ts-node": "3.3.0",
-    "@types/node": "^8.0.29",
-    "typescript": "2.5.2"
+    "@types/node": "^8.10.60",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.9.2"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
     "@types/body-parser": "^1.19.0",
-    "@types/config": "0.0.36",
+    "@types/config": "^0.0.36",
     "@types/cors": "^2.8.6",
-    "@types/helmet": "0.0.42",
-    "@types/jsonwebtoken": "^8.3.8",
+    "@types/helmet": "^0.0.42",
+    "@types/jsonwebtoken": "^8.3.9",
     "bcryptjs": "^2.4.3",
-    "class-validator": "^0.11.1",
+    "class-validator": "^0.12.2",
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "errorhandler": "^1.5.1",
     "express": "^4.15.4",
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.5.5",
+    "mongodb": "^3.5.6",
     "morgan": "^1.10.0",
-    "node-config": "0.0.2",
+    "node-config": "^0.0.2",
     "reflect-metadata": "^0.1.10",
     "ts-node-dev": "^1.0.0-pre.44",
-    "typeorm": "0.2.12"
+    "typeorm": "^0.2.24"
   },
   "scripts": {
     "tsc": "tsc",

@@ -29,7 +29,7 @@
  */
 
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { getRepository, getMongoRepository } from "typeorm";
 import { OCKTask } from "../entity/OCKTask";
 
 class TaskController {
@@ -60,7 +60,7 @@ class TaskController {
 
   // Delete all tasks in the collection
   static deleteTasks = async (req: Request, res: Response) => {
-    const taskRepository = getRepository(OCKTask);
+    const taskRepository = getMongoRepository(OCKTask);
     try {
       await taskRepository.deleteMany({});
     } catch (e) {

@@ -29,7 +29,7 @@
  */
 
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { getMongoRepository, getRepository } from "typeorm";
 import { OCKPatient } from "../entity/OCKPatient";
 import * as util from "util";
 
@@ -63,7 +63,7 @@ class PatientController {
 
   // Delete all patients in the collection
   static deletePatients = async (req: Request, res: Response) => {
-    const patientRepository = getRepository(OCKPatient);
+    const patientRepository = getMongoRepository(OCKPatient);
     try {
       await patientRepository.deleteMany({});
     } catch (e) {

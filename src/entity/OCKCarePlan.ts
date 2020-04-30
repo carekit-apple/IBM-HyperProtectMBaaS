@@ -31,30 +31,24 @@
 import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
 import { Name } from "./Name";
 import { Timezone } from "./Timezone";
-import { IsNotEmpty } from "class-validator";
 
 @Entity()
 export class OCKCarePlan {
   @ObjectIdColumn()
   _id: ObjectID;
 
-  @IsNotEmpty()
   @Column()
   id: string;
 
-  @IsNotEmpty()
   @Column((type) => Timezone)
   timezone: Timezone;
 
-  @IsNotEmpty()
   @Column((type) => Name)
   name: Name;
 
-  @IsNotEmpty()
   @Column()
   effectiveDate: number;
 
-  @IsNotEmpty()
   @Column()
   title: string;
 }

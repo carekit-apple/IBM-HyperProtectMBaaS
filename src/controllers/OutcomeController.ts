@@ -29,8 +29,8 @@
  */
 
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { OCKOutcome } from '../entity/OCKOutcome';
+import { getMongoRepository, getRepository } from "typeorm";
+import { OCKOutcome } from "../entity/OCKOutcome";
 import * as util from "util";
 
 class OutcomeController {
@@ -78,7 +78,7 @@ class OutcomeController {
 
   // Delete all outcomes in the collection
   static deleteOutcomes = async (req: Request, res: Response) => {
-    const outcomeRepository = getRepository(OCKOutcome);
+    const outcomeRepository = getMongoRepository(OCKOutcome);
     try {
       await outcomeRepository.deleteMany({});
     } catch (e) {

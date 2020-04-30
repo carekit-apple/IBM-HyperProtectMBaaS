@@ -29,7 +29,7 @@
  */
 
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import { getMongoRepository, getRepository } from "typeorm";
 import { OCKContact } from "../entity/OCKContact";
 import * as util from "util";
 
@@ -63,7 +63,7 @@ class ContactController {
 
   // Delete all contacts in the collection
   static deleteContacts = async (req: Request, res: Response) => {
-    const contactRepository = getRepository(OCKContact);
+    const contactRepository = getMongoRepository(OCKContact);
     try {
       await contactRepository.deleteMany({});
     } catch (e) {

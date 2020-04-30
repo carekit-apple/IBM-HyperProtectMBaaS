@@ -146,9 +146,6 @@ export class OCKTask {
   remoteID: string;
 
   @Column()
-  id: string;
-
-  @Column()
   carePlanUUID: string;
 
   @Column()

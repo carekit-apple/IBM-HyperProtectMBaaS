@@ -31,6 +31,8 @@
 import { KnowledgeVector, Process } from "./entity/KnowledgeVector";
 import { getMongoRepository } from "typeorm";
 import { isUndefined } from "util";
+import { OCKOutcome } from "./entity/OCKOutcome";
+import { OCKObject } from "./entity/OCKObject";
 
 // FIXME : For testing until good typescript uuid es6 compatable library is available
 export const uuid = "ADADC9C7-EC04-41A6-9256-422E213FBB33";
@@ -39,7 +41,7 @@ export const uuid = "ADADC9C7-EC04-41A6-9256-422E213FBB33";
 export async function createOrIncrementClock() {
   let repo = getMongoRepository(KnowledgeVector);
   let kvExists = await repo.findOne({ "processes.id": uuid });
-  if (isUndefined(kvExists)) await repo.insertOne(kv);
+  if (isUndefined(kvExists)) await repo.insertOne(kvExists);
   else {
     let kv = new KnowledgeVector();
     kv.processes = [];
@@ -51,7 +53,7 @@ export async function createOrIncrementClock() {
   }
 }
 
-export async function getLatestKnowledgeVector(): KnowledgeVector {
+export async function getLatestKnowledgeVector(): Promise<KnowledgeVector> {
   const kvExists = await getMongoRepository(KnowledgeVector).findOne({ "processes.id": uuid });
   console.assert(!isUndefined(kvExists), "Knowledge Vector should never be null");
   return kvExists;
@@ -60,4 +62,20 @@ export async function getLatestKnowledgeVector(): KnowledgeVector {
 export async function constructLatestKnowledgeVector(kvectors: KnowledgeVector[]) {
   for (let kv in kvectors) {
   }
+}
+
+export async function isOutcomeNew(outcome: OCKOutcome): Promise<boolean> {
+  const outcomeExists = await getMongoRepository(OCKOutcome).findOne({
+    taskUUID: outcome.taskUUID,
+    taskOccurrenceIndex: outcome.taskOccurrenceIndex,
+  });
+  return isUndefined(outcomeExists);
+}
+
+// This deletes outcomes based on matching taskUUID and taskOccurrenceIndex. This does not delete based on UUID as the UUID for an updated outcome will be different since its an un-versioned object
+export async function deleteExistingOutcomeForUpdate(outcome: OCKOutcome) {
+  await getMongoRepository(OCKOutcome).deleteOne({
+    taskUUID: outcome.taskUUID,
+    taskOccurrenceIndex: outcome.taskOccurrenceIndex,
+  });
 }
