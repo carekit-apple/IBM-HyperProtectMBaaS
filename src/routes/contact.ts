@@ -56,7 +56,7 @@ router.post(
   ContactController.newContact
 );
 
-//Delete all contacts. This is used primarity for testing
+//Delete all contacts. This is used primarily for testing
 router.delete(
   "/",
   //  [validateToken, validateRole(["patient"])],

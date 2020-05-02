@@ -63,7 +63,7 @@ router.delete(
   OutcomeController.deleteOutcome
 );
 
-//Delete all outcomes. This is used primarity for testing
+//Delete all outcomes. This is used primarily for testing
 router.delete(
   "/",
   //  [validateToken, validateRole(["patient"])],

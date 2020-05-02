@@ -35,7 +35,7 @@ import TaskController from "../controllers/TaskController";
 
 const router = Router();
 
-//Get all changesets (tasks and outcomes) for patient
+//Get all tasks for patient
 router.get(
   "/",
   //  [validateToken, validateRole(["patient"])],
@@ -56,7 +56,7 @@ router.post(
   TaskController.newTask
 );
 
-//Delete all tasks. This is used primarity for testing
+//Delete all tasks. This is used primarily for testing
 router.delete(
   "/",
   //  [validateToken, validateRole(["patient"])],

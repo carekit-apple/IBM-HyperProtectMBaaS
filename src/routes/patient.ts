@@ -56,7 +56,7 @@ router.post(
   PatientController.newPatient
 );
 
-//Delete all patients. This is used primarity for testing
+//Delete all patients. This is used primarily for testing
 router.delete(
   "/",
   //  [validateToken, validateRole(["patient"])],

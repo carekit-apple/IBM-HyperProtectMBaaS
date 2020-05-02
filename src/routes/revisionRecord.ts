@@ -56,7 +56,7 @@ router.post(
   RevisionRecordController.newRevisionRecord
 );
 
-//Delete all revisionRecords. This is used primarity for testing
+//Delete all revisionRecords. This is used primarily for testing
 router.delete(
   "/",
   //  [validateToken, validateRole(["patient"])],

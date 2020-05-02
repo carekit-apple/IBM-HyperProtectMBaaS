@@ -56,7 +56,7 @@ router.post(
   CarePlanController.newCarePlan
 );
 
-//Delete all careplans. This is used primarity for testing
+//Delete all careplans. This is used primarily for testing
 router.delete(
   "/",
   //  [validateToken, validateRole(["patient"])],
