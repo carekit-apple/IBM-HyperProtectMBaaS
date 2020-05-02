@@ -29,9 +29,9 @@
  */
 
 import { Router } from "express";
-import ContactController from '../controllers/ContactController';
-import { validateToken } from "../middleware/validateToken";
-import { validateRole } from "../middleware/validateRole";
+import ContactController from "../controllers/ContactController";
+//import { validateToken } from "../middleware/validateToken";
+//import { validateRole } from "../middleware/validateRole";
 
 const router = Router();
 

@@ -36,7 +36,7 @@ import uuid_lib = require("uuid");
 import { isNotEmpty } from "class-validator";
 import assert from "assert";
 
-export var uuid: string = "";
+export let uuid: string = "";
 
 /**
  * This will set/save the UUID for the backend across microservice re-starts. While it would be functionally OK to generate a UUID each time
@@ -45,19 +45,20 @@ export var uuid: string = "";
  */
 export async function getLocalUUID(): Promise<string> {
   if (uuid) {
-    assert(uuid !== "");
-    return uuid; // optimization to prevent DB look up each time
+    // optimization to prevent DB look up each time
+    return uuid;
   }
+
   let repo = getMongoRepository(UUID);
-  let mongo_uuid = await repo.find();
-  assert(mongo_uuid.length < 2, "Multiple UUIDs found for local db");
-  if (isNotEmpty(mongo_uuid)) {
+  let mongoUuid = await repo.find();
+  assert(mongoUuid.length < 2, "Multiple UUIDs found for local db");
+  if (!mongoUuid.length) {
     const new_uuid = uuid_lib.v4().toUpperCase();
     await repo.insertOne(new UUID(new_uuid));
     return new_uuid;
   }
-  assert(mongo_uuid.uuid !== "");
-  return mongo_uuid.uuid;
+  assert(isNotEmpty(mongoUuid[0].uuid));
+  return mongoUuid[0].uuid;
 }
 
 /**
@@ -70,10 +71,10 @@ export async function createOrIncrementClock(increment: boolean = true) {
   let repo = getMongoRepository(Process);
   let clock = await repo.findOne({ id: uuid });
   assert(uuid);
-  if (isNotEmpty(clock)) await repo.insertOne(new Process(uuid, 0));
+  if (!clock) await repo.insertOne(new Process(uuid, 0));
   else {
     if (increment) {
-      assert(isNotEmpty(uuid));
+      assert(uuid);
       await repo.updateOne({ id: uuid }, { $inc: { clock: 1 } }, { upsert: true });
     }
   }
@@ -102,8 +103,8 @@ export async function mergeNewClocksWithExisting(processes: Process[]) {
 export async function getLatestKnowledgeVector(): Promise<KnowledgeVector> {
   const clocks = await getMongoRepository(Process).find();
   //console.log(clocks);
-  assert(isNotEmpty(clocks), "At least one clock must always exist");
-  var kv = new KnowledgeVector();
+  assert(clocks.length > 0, "At least one clock must always exist");
+  let kv = new KnowledgeVector();
 
   // paranoid check to ensure quality of UUID data in db
   clocks.forEach((process) => assert(isNotEmpty(process.id)));

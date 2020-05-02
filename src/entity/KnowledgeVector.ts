@@ -77,7 +77,7 @@ export class Process {
 
 @jsonObject
 export class KnowledgeVector {
-  @Column({ type: "Process", array: true })
+  @Column({ type: Process, array: true })
   @IsDefined()
   @jsonArrayMember(Process)
   @ValidateNested()

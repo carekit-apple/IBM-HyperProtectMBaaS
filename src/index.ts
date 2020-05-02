@@ -37,7 +37,7 @@ import cors from "cors";
 import routes from "./routes/routes";
 import config = require("config");
 
-import {createOrIncrementClock, getLocalUUID, uuid} from "./utils";
+import { createOrIncrementClock } from "./utils";
 
 //import * as fs from "fs";
 //const ca = [fs.readFileSync(__dirname + "/cert.pem")];

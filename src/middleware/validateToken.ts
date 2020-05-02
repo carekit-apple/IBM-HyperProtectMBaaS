@@ -42,7 +42,6 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
   //Get the jwt token from the header. Format --> Authorization: Bearer <token>
   const token = <string>req.get('authorization').split(' ')[1]
   console.log("Token : " + token)
-  //const token = <string>req.headers["auth"];
   let jwtToken;
 
   try {
@@ -50,8 +49,7 @@ export const validateToken = (req: Request, res: Response, next: NextFunction) =
     res.locals.jwtToken = jwtToken;
   } catch (error) {
     //If token is not valid, respond with 401 (unauthorized)
-    res.status(401).send();
-    return;
+    return res.status(401).send();
   }
 
   //The token is valid for 1 hour

@@ -30,8 +30,8 @@
 
 import { Router } from "express";
 import TaskController from "../controllers/TaskController";
-import { validateToken } from "../middleware/validateToken";
-import { validateRole } from "../middleware/validateRole";
+// import { validateToken } from "../middleware/validateToken";
+// import { validateRole } from "../middleware/validateRole";
 
 const router = Router();
 
@@ -62,6 +62,5 @@ router.delete(
   //  [validateToken, validateRole(["patient"])],
   TaskController.deleteTasks
 );
-
 
 export default router;

@@ -30,24 +30,40 @@
 
 import { Router } from "express";
 import UserController from "../controllers/UserController";
-import { validateToken } from "../middleware/validateToken";
-import { validateRole } from "../middleware/validateRole";
+//import { validateToken } from "../middleware/validateToken";
+//import { validateRole } from "../middleware/validateRole";
 
 const router = Router();
 
 //Get all users
-router.get("/", [validateToken, validateRole(["admin"])], UserController.listAll);
+router.get(
+  "/",
+  //[validateToken, validateRole(["admin"])],
+  UserController.listAll
+);
 
 // Get one user
-router.get("/:id([0-9]+)", [validateToken, validateRole(["admin"])], UserController.getOneById);
+router.get(
+  "/:id([0-9]+)", //[validateToken, validateRole(["admin"])],
+  UserController.getOneById
+);
 
 //Create a new user
-router.post("/", /*[validateToken, validateRole(["admin"])],*/ UserController.newUser);
+router.post(
+  "/", // [validateToken, validateRole(["admin"])],
+  UserController.newUser
+);
 
 //Edit one user
-router.patch("/:id([0-9]+)", [validateToken, validateRole(["admin"])], UserController.editUser);
+router.patch(
+  "/:id([0-9]+)", //[validateToken, validateRole(["admin"])],
+  UserController.editUser
+);
 
 //Delete one user
-router.delete("/:id([0-9]+)", [validateToken, validateRole(["admin"])], UserController.deleteUser);
+router.delete(
+  "/:id([0-9]+)", //[validateToken, validateRole(["admin"])],
+  UserController.deleteUser
+);
 
 export default router;

@@ -30,8 +30,8 @@
 
 import { Router } from "express";
 import RevisionRecordController from "../controllers/RevisionRecordController";
-import { validateToken } from "../middleware/validateToken";
-import { validateRole } from "../middleware/validateRole";
+// import { validateToken } from "../middleware/validateToken";
+// import { validateRole } from "../middleware/validateRole";
 
 const router = Router();
 

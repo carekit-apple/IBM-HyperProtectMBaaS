@@ -9,3 +9,4 @@ src/migration/*
 *.ppk
 .idea/*
 build/*
+*.key

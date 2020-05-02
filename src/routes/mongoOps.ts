@@ -30,7 +30,8 @@
 
 import { Router } from "express";
 import MongoController from "../controllers/MongoController";
-import { validateToken } from "../middleware/validateToken";
+//import { validateToken } from "../middleware/validateToken";
+//import { validateRole } from "../middleware/validateRole";
 
 const router = Router();
 router.get(

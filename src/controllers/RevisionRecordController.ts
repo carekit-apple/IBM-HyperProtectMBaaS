@@ -34,7 +34,6 @@ import { OCKRevisionRecord } from "../entity/OCKRevisionRecord";
 import { OCKTask } from "../entity/OCKTask";
 import { OCKOutcome } from "../entity/OCKOutcome";
 import * as util from "util";
-import { isUndefined } from "util";
 import {
   createOrIncrementClock,
   getLatestKnowledgeVector,
@@ -44,7 +43,7 @@ import {
 } from "../utils";
 import { KnowledgeVector, Process } from "../entity/KnowledgeVector";
 import assert from "assert";
-import {isNotEmpty, isUUID, validate} from "class-validator";
+import { isEmpty, isNotEmpty, isUUID, validate } from "class-validator";
 import { TypedJSON } from "typedjson";
 import Ajv from "ajv";
 export const kvSchema = require("../jsonSchema/knowledgeVector.json");
@@ -53,7 +52,7 @@ class RevisionRecordController {
   static listAll = async (req: Request, res: Response) => {
     console.log(util.inspect(req.query.knowledgeVector, false, null, true /* enable colors */));
 
-    if (isUndefined(req.query.knowledgeVector)) {
+    if (isEmpty(req.query.knowledgeVector)) {
       res
         .status(400)
         .send(
@@ -71,7 +70,7 @@ class RevisionRecordController {
       return;
     }
 
-    var incomingKV: KnowledgeVector;
+    let incomingKV: KnowledgeVector;
     try {
       incomingKV = new TypedJSON(KnowledgeVector).parse(req.query.knowledgeVector);
     } catch (error) {
@@ -87,21 +86,21 @@ class RevisionRecordController {
       return;
     }
 
-    console.log(util.inspect("IncomingKV :" + incomingKV, false, null, true /* enable colors */));
+    console.log(util.inspect(incomingKV, false, null, true /* enable colors */));
 
     let returnRevRecord = new OCKRevisionRecord();
     returnRevRecord.entities = [];
 
     // Case 1 : iOS device is syncing for the first time, it has no knowledge of the servers clock
-    if (isUndefined(incomingKV.processes.find((process) => process.id === uuid))) {
+    if (isEmpty(incomingKV.processes.find((process) => process.id === uuid))) {
       // store incoming clock locally
       let clockRepo = getMongoRepository(Process);
 
       for (const process of incomingKV.processes) {
         assert(isUUID(process.id));
         const processExists = await clockRepo.findOne({ id: process.id });
-        if (isUndefined(processExists)) {
-          assert(isNotEmpty(process.id))
+        if (isEmpty(processExists)) {
+          assert(isNotEmpty(process.id));
           await clockRepo.save(process);
         }
       }
@@ -132,7 +131,7 @@ class RevisionRecordController {
 
     // Case 2 : It has synced before but its clock might be older than local, send entities newer than clock
     const clock = incomingKV.processes.find((process) => process.id === uuid).clock;
-    assert(!isUndefined(clock), "clock cannot be undefined at this point");
+    assert(!isEmpty(clock), "clock cannot be undefined at this point");
 
     const taskRepository = getMongoRepository(OCKTask);
     const tasks = await taskRepository.find({
@@ -170,7 +169,7 @@ class RevisionRecordController {
     const revisionRecords = await revisionRecordRepository.find();
 
     //console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
-    res.send(isUndefined(revisionRecords) ? {} : revisionRecords);
+    res.send(isEmpty(revisionRecords) ? {} : revisionRecords);
   };
 
   static newRevisionRecord = async (req: Request, res: Response) => {
@@ -189,7 +188,7 @@ class RevisionRecordController {
             try {
               const taskExists = await taskRepository.findOne({ uuid: entity.object.uuid });
               // if task exists, don't overwrite
-              if (isUndefined(taskExists)) {
+              if (isEmpty(taskExists)) {
                 const task = taskRepository.create(entity.object);
                 task.kv = await getLatestKnowledgeVector();
                 console.log(util.inspect(task, false, null, true /* enable colors */));
@@ -210,7 +209,7 @@ class RevisionRecordController {
             try {
               const outcomeExists = await outcomeRepository.findOne({ uuid: entity.object.uuid });
               // if outcome exists, don't overwrite. Update scenario was handled above
-              if (isUndefined(outcomeExists)) {
+              if (isEmpty(outcomeExists)) {
                 const outcome = outcomeRepository.create(entity.object);
                 outcome.kv = await getLatestKnowledgeVector();
                 console.log(util.inspect(outcome, false, null, true /* enable colors */));

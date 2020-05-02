@@ -30,8 +30,8 @@
 
 import { Router } from "express";
 import OutcomeController from "../controllers/OutcomeController";
-import { validateToken } from "../middleware/validateToken";
-import { validateRole } from "../middleware/validateRole";
+//import { validateToken } from "../middleware/validateToken";
+//import { validateRole } from "../middleware/validateRole";
 
 const router = Router();
 

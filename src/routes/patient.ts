@@ -29,9 +29,9 @@
  */
 
 import { Router } from "express";
-import PatientController from '../controllers/PatientController';
-import { validateToken } from "../middleware/validateToken";
-import { validateRole } from "../middleware/validateRole";
+import PatientController from "../controllers/PatientController";
+//import { validateToken } from "../middleware/validateToken";
+//import { validateRole } from "../middleware/validateRole";
 
 const router = Router();
 
