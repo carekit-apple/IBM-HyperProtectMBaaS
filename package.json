@@ -25,7 +25,6 @@
     "class-validator": "^0.12.2",
     "config": "^3.3.1",
     "cors": "^2.8.5",
-    "dotenv": "^8.1",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
@@ -40,7 +39,6 @@
   "scripts": {
     "tsc": "tsc",
     "start": "set debug=* && ts-node-dev --respawn --transpileOnly ./src/index.ts",
-    "prod": "tsc && node ./build/app.js",
-    "migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
+    "prod": "tsc && node ./build/app.js"
   }
 }

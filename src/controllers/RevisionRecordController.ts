@@ -56,7 +56,7 @@ class RevisionRecordController {
       res
         .status(400)
         .send(
-          'Must send an array of knowledge vectors as query param. An empty knowledge vector would be { processes: [{ id : "" , clock : 0 } ]}'
+          'Must send an array of knowledge vectors as query param. An empty knowledge vector would be { processes: [{ id : "validUUIDv4" , clock : 0 } ]}'
         );
       return;
     }
