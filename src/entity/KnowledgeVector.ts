@@ -28,22 +28,82 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import {Column, Entity, ObjectID, ObjectIdColumn} from "typeorm";
-
-export class Process {
-  @Column()
-  id : string;
-
-  @Column()
-  clock : number;
-}
+import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, UpdateDateColumn } from "typeorm";
+import { IsDefined, IsString, IsNotEmpty, ValidateNested } from "class-validator";
+import { jsonObject, jsonMember, jsonArrayMember } from "typedjson";
 
 @Entity()
-export class KnowledgeVector {
+@jsonObject()
+export class Process {
   @ObjectIdColumn()
-  _id : ObjectID;
+  _id: ObjectID;
 
-  @Column({type : Process, array : true})
-  processes: Process[];
+  @Column()
+  @IsString()
+  @jsonMember
+  @IsNotEmpty()
+  id: string;
+
+  @Column()
+  @IsDefined()
+  @jsonMember
+  @IsNotEmpty()
+  clock: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  constructor(id: string, clock: number) {
+    this.id = id;
+    this.clock = clock;
+  }
+
+  lessThanOrEqualTo(process: Process): boolean {
+    if (this.id === process.id) {
+      if (this.clock > process.clock) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  greaterThan(process: Process): boolean {
+    return !this.lessThanOrEqualTo(process);
+  }
 }
 
+@jsonObject
+export class KnowledgeVector {
+  @Column({ type: "Process", array: true })
+  @IsDefined()
+  @jsonArrayMember(Process)
+  @ValidateNested()
+  @IsNotEmpty()
+  processes: Process[];
+
+  /**
+   * Returns true if *strictly* less than p
+   *
+   * Here processes1.lessThan(processes2) would return true
+   * processes1 = [{ id : "A" , clock : 1 }, { id : "B" , clock : 2}]
+   * processes2 = [{ id : "A" , clock : 2 }, { id : "B" , clock : 3}, { id : "C" , clock : 1}]
+   *
+   * but here, it would not as id's A would be equal to (but not less than), even though id : B is less than
+   * processes1 = [{ id : "A" , clock : 1 }, { id : "B" , clock : 2}]
+   * processes2 = [{ id : "A" , clock : 1 }, { id : "B" , clock : 3}, { id : "C" , clock : 1}]
+   *
+   * @param rhs
+   */
+  lessThanOrEqualTo(rhs: KnowledgeVector) {
+    for (let lhsProcess of this.processes) {
+      for (let rhsProcess of rhs.processes)
+        if (lhsProcess.greaterThan(rhsProcess)) {
+          return false;
+        }
+    }
+    return true;
+  }
+}

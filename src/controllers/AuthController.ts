@@ -34,6 +34,7 @@ import { getRepository } from "typeorm";
 
 import { User } from "../entity/User";
 import config from "../../config/default.json";
+import { validate } from "class-validator";
 
 class AuthController {
   static login = async (req: Request, res: Response) => {
@@ -41,6 +42,7 @@ class AuthController {
     let { username, password } = req.body;
     if (!(username && password)) {
       res.status(400).send();
+      return;
     }
 
     //Get user from database
@@ -50,6 +52,7 @@ class AuthController {
       user = await userRepository.findOneOrFail({ where: { username } });
     } catch (error) {
       res.status(401).send();
+      return;
     }
 
     //Check if encrypted password match
@@ -73,6 +76,7 @@ class AuthController {
     const { oldPassword, newPassword } = req.body;
     if (!(oldPassword && newPassword)) {
       res.status(400).send();
+      return;
     }
 
     const userRepository = getRepository(User);
@@ -81,6 +85,7 @@ class AuthController {
       user = await userRepository.findOneOrFail(id);
     } catch (id) {
       res.status(401).send();
+      return;
     }
 
     if (!user.checkIfUnencryptedPasswordIsValid(oldPassword)) {

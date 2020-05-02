@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "Process": {
+            "properties": {
+                "clock": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "properties": {
+        "processes": {
+            "items": {
+                "$ref": "#/definitions/Process"
+            },
+            "type": "array"
+        }
+    },
+    "type": "string"
+}

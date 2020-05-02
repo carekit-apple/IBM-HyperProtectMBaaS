@@ -28,9 +28,10 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, ObjectID, ObjectIdColumn, Entity } from "typeorm";
+import { Column, ObjectID, ObjectIdColumn, Entity, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Timezone } from "./Timezone";
 import { SchemaVersion } from "./SchemaVersion";
+import { KnowledgeVector } from "./KnowledgeVector";
 
 export class Note {
   @Column()
@@ -147,4 +148,13 @@ export class OCKOutcome {
 
   @Column((type) => UserInfo)
   userInfo: UserInfo;
+
+  @Column((type) => KnowledgeVector)
+  kv: KnowledgeVector;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

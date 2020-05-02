@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2020, International Business Machines All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
- 
+
  1.  Redistributions of source code must retain the above copyright notice, this
  list of conditions and the following disclaimer.
- 
+
  2.  Redistributions in binary form must reproduce the above copyright notice,
  this list of conditions and the following disclaimer in the documentation and/or
  other materials provided with the distribution.
- 
+
  3. Neither the name of the copyright holder(s) nor the names of any contributors
  may be used to endorse or promote products derived from this software without
  specific prior written permission. No license is granted to the trademarks of
  the copyright holders even if such marks are included in this software.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -28,44 +28,23 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import "reflect-metadata";
-import { createConnection } from "typeorm";
-import express from "express";
-import helmet from "helmet";
-import morgan from "morgan";
-import cors from "cors";
-import routes from "./routes/routes";
-import config = require("config");
+import { Column, Entity, ObjectIdColumn, ObjectID, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
-import {createOrIncrementClock, getLocalUUID, uuid} from "./utils";
+@Entity()
+export class UUID {
+  @ObjectIdColumn()
+  _id: ObjectID;
 
-//import * as fs from "fs";
-//const ca = [fs.readFileSync(__dirname + "/cert.pem")];
+  @Column()
+  uuid: string;
 
-createConnection()
-  .then(async (connection) => {
-    const app = express();
+  @CreateDateColumn()
+  createdAt: Date;
 
-    app.use(cors());
-    app.use(helmet());
-    app.use(morgan("short"));
-    app.use(express.json());
+  @UpdateDateColumn()
+  updatedAt: Date;
 
-    app.use("/", routes);
-
-    if (app.get("env") === "production") {
-      app.use(function (req, res, next) {
-        const protocol = req.get("x-forwarded-proto");
-        protocol == "https" ? next() : res.redirect("https://" + req.hostname + req.url);
-      });
-    }
-
-    await createOrIncrementClock(false);
-
-    const port = config.get("server.port");
-
-    app.listen(port, () => {
-      console.log("Server started on port " + port);
-    });
-  })
-  .catch((error) => console.log(error));
+  constructor(uuid: string) {
+    this.uuid = uuid;
+  }
+}

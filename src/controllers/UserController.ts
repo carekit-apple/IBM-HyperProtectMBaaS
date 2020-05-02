@@ -115,7 +115,7 @@ class UserController {
       return;
     }
 
-    user.username = username;
+    user.name = username;
     user.role = role;
     const errors = await validate(user);
     if (errors.length > 0) {
@@ -137,14 +137,13 @@ class UserController {
     const id = req.params.id;
 
     const userRepository = getRepository(User);
-    let user: User;
     try {
-      user = await userRepository.findOneOrFail(id);
+      await userRepository.findOneOrFail(id);
     } catch (error) {
       res.status(404).send("User not found");
       return;
     }
-    userRepository.delete(id);
+    await userRepository.delete(id);
 
     res.status(204).send();
   };

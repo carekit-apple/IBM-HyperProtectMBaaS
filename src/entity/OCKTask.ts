@@ -28,8 +28,9 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, Entity, ObjectIdColumn, ObjectID } from "typeorm";
+import { Column, Entity, ObjectIdColumn, ObjectID, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Timezone } from "./Timezone";
+import { KnowledgeVector } from "./KnowledgeVector";
 
 export class Note {
   @Column()
@@ -180,4 +181,13 @@ export class OCKTask {
 
   @Column()
   deletedDate: number;
+
+  @Column((type) => KnowledgeVector)
+  kv: KnowledgeVector;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

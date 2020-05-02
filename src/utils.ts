@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2020, International Business Machines All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
- 
+
  1.  Redistributions of source code must retain the above copyright notice, this
  list of conditions and the following disclaimer.
- 
+
  2.  Redistributions in binary form must reproduce the above copyright notice,
  this list of conditions and the following disclaimer in the documentation and/or
  other materials provided with the distribution.
- 
+
  3. Neither the name of the copyright holder(s) nor the names of any contributors
  may be used to endorse or promote products derived from this software without
  specific prior written permission. No license is granted to the trademarks of
  the copyright holders even if such marks are included in this software.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -30,49 +30,106 @@
 
 import { KnowledgeVector, Process } from "./entity/KnowledgeVector";
 import { getMongoRepository } from "typeorm";
-import { isUndefined } from "util";
 import { OCKOutcome } from "./entity/OCKOutcome";
-import { OCKObject } from "./entity/OCKObject";
+import { UUID } from "./entity/uuid";
+import uuid_lib = require("uuid");
+import { isNotEmpty } from "class-validator";
+import assert from "assert";
 
-// FIXME : For testing until good typescript uuid es6 compatable library is available
-export const uuid = "ADADC9C7-EC04-41A6-9256-422E213FBB33";
+export var uuid: string = "";
 
-// This is used when we connect to Mongo or from put operations. Since merge operations are idempotent, its safe to increment this conservatively
-export async function createOrIncrementClock() {
-  let repo = getMongoRepository(KnowledgeVector);
-  let kvExists = await repo.findOne({ "processes.id": uuid });
-  if (isUndefined(kvExists)) await repo.insertOne(kvExists);
+/**
+ * This will set/save the UUID for the backend across microservice re-starts. While it would be functionally OK to generate a UUID each time
+ * the microservice starts, it would lead to vector clock pollution, wasted space (as clocks get stored with entities) and a lot of network traffic
+ * since the backend sync logic wouldn't find the clock with newly generated UUID in the vec clocks coming in from the frontend for a new microservice instance
+ */
+export async function getLocalUUID(): Promise<string> {
+  if (uuid) {
+    assert(uuid !== "");
+    return uuid; // optimization to prevent DB look up each time
+  }
+  let repo = getMongoRepository(UUID);
+  let mongo_uuid = await repo.find();
+  assert(mongo_uuid.length < 2, "Multiple UUIDs found for local db");
+  if (isNotEmpty(mongo_uuid)) {
+    const new_uuid = uuid_lib.v4().toUpperCase();
+    await repo.insertOne(new UUID(new_uuid));
+    return new_uuid;
+  }
+  assert(mongo_uuid.uuid !== "");
+  return mongo_uuid.uuid;
+}
+
+/**
+ *
+ * @param increment
+ */
+export async function createOrIncrementClock(increment: boolean = true) {
+  uuid = await getLocalUUID();
+  console.log("UUID : " + uuid);
+  let repo = getMongoRepository(Process);
+  let clock = await repo.findOne({ id: uuid });
+  assert(uuid);
+  if (isNotEmpty(clock)) await repo.insertOne(new Process(uuid, 0));
   else {
-    let kv = new KnowledgeVector();
-    kv.processes = [];
-    let process = new Process();
-    kv.processes.push(process);
-    process.clock = 1;
-    process.id = uuid;
-    await repo.updateOne({ "processes.id": uuid }, { $inc: { "processes.$[].clock": 1 } }, { upsert: true });
+    if (increment) {
+      assert(isNotEmpty(uuid));
+      await repo.updateOne({ id: uuid }, { $inc: { clock: 1 } }, { upsert: true });
+    }
   }
 }
 
+/**
+ * Adds new (unknown) clocks to local db. This method does not increment any clocks.
+ *
+ * @param processes clocks (typically from a knowledge vector )
+ */
+export async function mergeNewClocksWithExisting(processes: Process[]) {
+  let clockRepo = getMongoRepository(Process);
+
+  for (const process of processes) {
+    const processExists = await clockRepo.findOne({ id: process.id });
+    if (isNotEmpty(processExists)) {
+      assert(isNotEmpty(process.id));
+      await clockRepo.save(process);
+    }
+  }
+}
+
+/**
+ * Gets local knowledge vector (i.e all clocks stores in MongoDB)
+ */
 export async function getLatestKnowledgeVector(): Promise<KnowledgeVector> {
-  const kvExists = await getMongoRepository(KnowledgeVector).findOne({ "processes.id": uuid });
-  console.assert(!isUndefined(kvExists), "Knowledge Vector should never be null");
-  return kvExists;
-}
-// Given a an array of knowledge vectors, returns a vector with the latest clocks for the processes
-export async function constructLatestKnowledgeVector(kvectors: KnowledgeVector[]) {
-  for (let kv in kvectors) {
-  }
+  const clocks = await getMongoRepository(Process).find();
+  //console.log(clocks);
+  assert(isNotEmpty(clocks), "At least one clock must always exist");
+  var kv = new KnowledgeVector();
+
+  // paranoid check to ensure quality of UUID data in db
+  clocks.forEach((process) => assert(isNotEmpty(process.id)));
+
+  // Removes _id field
+  kv.processes = clocks.map(({ _id, ...item }) => item) as Process[];
+  return kv;
 }
 
+/**
+ * Checks if outcome exists in db
+ * @param outcome
+ */
 export async function isOutcomeNew(outcome: OCKOutcome): Promise<boolean> {
   const outcomeExists = await getMongoRepository(OCKOutcome).findOne({
     taskUUID: outcome.taskUUID,
     taskOccurrenceIndex: outcome.taskOccurrenceIndex,
   });
-  return isUndefined(outcomeExists);
+  return isNotEmpty(outcomeExists);
 }
 
-// This deletes outcomes based on matching taskUUID and taskOccurrenceIndex. This does not delete based on UUID as the UUID for an updated outcome will be different since its an un-versioned object
+/**
+ * This deletes outcomes based on matching taskUUID and taskOccurrenceIndex.
+ * This does not delete based on UUID as the UUID for an updated outcome will be different since its an un-versioned object
+ * @param outcome
+ */
 export async function deleteExistingOutcomeForUpdate(outcome: OCKOutcome) {
   await getMongoRepository(OCKOutcome).deleteOne({
     taskUUID: outcome.taskUUID,

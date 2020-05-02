@@ -40,39 +40,136 @@ import {
   getLatestKnowledgeVector,
   isOutcomeNew,
   deleteExistingOutcomeForUpdate,
+  uuid,
 } from "../utils";
+import { KnowledgeVector, Process } from "../entity/KnowledgeVector";
+import assert from "assert";
+import {isNotEmpty, isUUID, validate} from "class-validator";
+import { TypedJSON } from "typedjson";
+import Ajv from "ajv";
+export const kvSchema = require("../jsonSchema/knowledgeVector.json");
 
 class RevisionRecordController {
   static listAll = async (req: Request, res: Response) => {
-    const clock = Number(isUndefined(req.query.clock) ? 0 : req.query.clock);
-    const revisionRecordRepository = getRepository(OCKRevisionRecord);
-    //const revisionRecords: OCKRevisionRecord[] = await revisionRecordRepository.find({"knowledgeVector.processes.clock": {$gte: clock}});
+    console.log(util.inspect(req.query.knowledgeVector, false, null, true /* enable colors */));
 
-    // FIXME : send only latest rev record
-    const revisionRecords: OCKRevisionRecord[] = await revisionRecordRepository.find({
-      $query: {},
-      $orderby: { "knowledgeVector.processes.clock": -1 },
-    });
-    //console.log(util.inspect(revisionRecords , false, null, true /* enable colors */));
+    if (isUndefined(req.query.knowledgeVector)) {
+      res
+        .status(400)
+        .send(
+          'Must send an array of knowledge vectors as query param. An empty knowledge vector would be { processes: [{ id : "" , clock : 0 } ]}'
+        );
+      return;
+    }
+
+    // Thorough JSON validation using JSON Schema, TypedJSON and class-validator
+    const ajv = new Ajv();
+    const valid = ajv.validate(kvSchema, req.query.knowledgeVector);
+    if (!valid) {
+      console.log(ajv.errors);
+      res.status(400).send(ajv.errors);
+      return;
+    }
+
+    var incomingKV: KnowledgeVector;
+    try {
+      incomingKV = new TypedJSON(KnowledgeVector).parse(req.query.knowledgeVector);
+    } catch (error) {
+      res.status(400).send("JSON schema error");
+      return;
+    }
+
+    console.log(util.inspect(incomingKV, false, null, true /* enable colors */));
+
+    const errors = await validate(incomingKV);
+    if (errors.length > 0) {
+      res.status(400).send(errors);
+      return;
+    }
+
+    console.log(util.inspect("IncomingKV :" + incomingKV, false, null, true /* enable colors */));
 
     let returnRevRecord = new OCKRevisionRecord();
     returnRevRecord.entities = [];
 
-    // merge revision records greater than clock, but use clock of thee newest record
-    // for (let entity of revisionRecords) {
-    //   entity.entities.map((entity) => returnRevRecord.entities.push(entity));
-    // }
+    // Case 1 : iOS device is syncing for the first time, it has no knowledge of the servers clock
+    if (isUndefined(incomingKV.processes.find((process) => process.id === uuid))) {
+      // store incoming clock locally
+      let clockRepo = getMongoRepository(Process);
+
+      for (const process of incomingKV.processes) {
+        assert(isUUID(process.id));
+        const processExists = await clockRepo.findOne({ id: process.id });
+        if (isUndefined(processExists)) {
+          assert(isNotEmpty(process.id))
+          await clockRepo.save(process);
+        }
+      }
+
+      // send all outcomes and tasks
+      const taskRepository = getMongoRepository(OCKTask);
+      const tasks = await taskRepository.find({});
+
+      const outcomeRepository = getMongoRepository(OCKOutcome);
+      const outcomes = await outcomeRepository.find({});
+
+      tasks.map((entity) => {
+        delete entity.kv;
+        returnRevRecord.entities.push({ type: "task", object: entity });
+      });
+      outcomes.map((entity) => {
+        delete entity.kv;
+        returnRevRecord.entities.push({ type: "outcome", object: entity });
+      });
+
+      // set kv for revisionRecord
+      returnRevRecord.knowledgeVector = await getLatestKnowledgeVector();
+
+      //console.log(util.inspect(returnRevRecord, false, null, true /* enable colors */));
+      res.status(201).send(returnRevRecord);
+      return;
+    }
+
+    // Case 2 : It has synced before but its clock might be older than local, send entities newer than clock
+    const clock = incomingKV.processes.find((process) => process.id === uuid).clock;
+    assert(!isUndefined(clock), "clock cannot be undefined at this point");
+
+    const taskRepository = getMongoRepository(OCKTask);
+    const tasks = await taskRepository.find({
+      $and: [{ "kv.processes.clock": { $gt: clock } }, { "kv.processes.id": { $eq: uuid } }],
+    });
+
+    const outcomeRepository = getMongoRepository(OCKOutcome);
+    const outcomes = await outcomeRepository.find({
+      $and: [{ "kv.processes.clock": { $gt: clock } }, { "kv.processes.id": { $eq: uuid } }],
+    });
+
+    tasks.map((entity) => {
+      delete entity.kv;
+      returnRevRecord.entities.push({ type: "task", object: entity });
+    });
+    outcomes.map((entity) => {
+      delete entity.kv;
+      returnRevRecord.entities.push({ type: "outcome", object: entity });
+    });
+
+    // set kv for revisionRecord
     returnRevRecord.knowledgeVector = await getLatestKnowledgeVector();
-    //console.log(util.inspect(revisionRecords.length == 0 ? returnRevRecord : revisionRecords[revisionRecords.length-1], false, null, true /* enable colors */));
-    res.status(201).send(revisionRecords.length == 0 ? returnRevRecord : revisionRecords[revisionRecords.length - 1]);
+
+    //console.log(util.inspect(returnRevRecord, false, null, true /* enable colors */));
+    res.status(201).send(returnRevRecord);
   };
 
+  /**
+   * TODO Implement id based lookup
+   * @param req
+   * @param res
+   */
   static getOneById = async (req: Request, res: Response) => {
-    const clock = isUndefined(req.query.clock) ? 0 : req.query.clock;
     const revisionRecordRepository = getRepository(OCKRevisionRecord);
     const revisionRecords = await revisionRecordRepository.find();
 
-    console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
+    //console.log(util.inspect(revisionRecords, false, null, true /* enable colors */));
     res.send(isUndefined(revisionRecords) ? {} : revisionRecords);
   };
 
@@ -80,7 +177,7 @@ class RevisionRecordController {
     const revRecord = req.body as OCKRevisionRecord;
     const revisionRecordRepository = getRepository(OCKRevisionRecord);
 
-    console.log(util.inspect(revRecord, false, null, true /* enable colors */));
+    // console.log(util.inspect(revRecord, false, null, true /* enable colors */));
     try {
       const revisionRecord = revisionRecordRepository.create(revRecord);
       await revisionRecordRepository.save(revisionRecord);
@@ -94,6 +191,8 @@ class RevisionRecordController {
               // if task exists, don't overwrite
               if (isUndefined(taskExists)) {
                 const task = taskRepository.create(entity.object);
+                task.kv = await getLatestKnowledgeVector();
+                console.log(util.inspect(task, false, null, true /* enable colors */));
                 await taskRepository.save(task);
                 await createOrIncrementClock();
               }
@@ -113,6 +212,8 @@ class RevisionRecordController {
               // if outcome exists, don't overwrite. Update scenario was handled above
               if (isUndefined(outcomeExists)) {
                 const outcome = outcomeRepository.create(entity.object);
+                outcome.kv = await getLatestKnowledgeVector();
+                console.log(util.inspect(outcome, false, null, true /* enable colors */));
                 await outcomeRepository.save(outcome);
                 await createOrIncrementClock();
               }

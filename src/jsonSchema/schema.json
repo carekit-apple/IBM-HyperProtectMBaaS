@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "string",
+  "title": "The Root Schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "additionalProperties": true,
+  "required": [
+    "processes"
+  ],
+  "properties": {
+    "processes": {
+      "$id": "#/properties/processes",
+      "type": "array",
+      "title": "The Processes Schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": [],
+      "examples": [
+        [
+          {
+            "clock": 1.0,
+            "id": ""
+          }
+        ]
+      ],
+      "additionalItems": true,
+      "items": {
+        "$id": "#/properties/processes/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "description": "An explanation about the purpose of this instance.",
+        "default": {},
+        "examples": [
+          {
+            "clock": 1.0,
+            "id": ""
+          }
+        ],
+        "additionalProperties": true,
+        "required": [
+          "id",
+          "clock"
+        ],
+        "properties": {
+          "id": {
+            "$id": "#/properties/processes/items/properties/id",
+            "type": "string",
+            "title": "The Id Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              ""
+            ]
+          },
+          "clock": {
+            "$id": "#/properties/processes/items/properties/clock",
+            "type": "integer",
+            "title": "The Clock Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+              1.0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

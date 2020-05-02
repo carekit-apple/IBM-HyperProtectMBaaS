@@ -4,8 +4,10 @@
   "description": "Backend for Hyper Protect SDK for iOS",
   "devDependencies": {
     "@types/node": "^8.10.60",
+    "assert": "^2.0.0",
     "ts-node": "^3.3.0",
-    "typescript": "^2.9.2"
+    "typescript": "^2.9.2",
+    "ts-node-dev": "^1.0.0-pre.44"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -14,6 +16,10 @@
     "@types/cors": "^2.8.6",
     "@types/helmet": "^0.0.42",
     "@types/jsonwebtoken": "^8.3.9",
+    "@types/morgan": "^1.9.0",
+    "@types/uuidv4": "^5.0.0",
+    "@types/uuid": "^7.0.3",
+    "ajv": "^6.12.2",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.12.2",
     "config": "^3.3.1",
@@ -24,10 +30,10 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.6",
     "morgan": "^1.10.0",
-    "node-config": "^0.0.2",
     "reflect-metadata": "^0.1.10",
-    "ts-node-dev": "^1.0.0-pre.44",
-    "typeorm": "^0.2.24"
+    "typedjson": "^1.5.1",
+    "typeorm": "^0.2.24",
+    "uuid": "^8.0.0"
   },
   "scripts": {
     "tsc": "tsc",
