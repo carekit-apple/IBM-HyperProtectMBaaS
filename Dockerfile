@@ -12,6 +12,9 @@ RUN npm install
 
 # Bundle app source
 COPY . .
+COPY certs/ /usr/app/carekit-hyperprotect/
 
 EXPOSE 3000
+EXPOSE 27017
+
 CMD [ "npm", "start" ]
