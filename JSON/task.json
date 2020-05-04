@@ -1,0 +1,85 @@
+{
+    "schemaVersion": {
+        "majorVersion": 2,
+        "minorVersion": 0,
+        "patchNumber": 1
+    },
+    "createdDate": 606516270.724944,
+    "id": "abc123",
+    "notes": [],
+    "title": "A",
+    "uuid": "2D7F0E36-3A95-452C-827C-389ADB678972",
+    "impactsAdherence": true,
+    "updatedDate": 606516270.72494602,
+    "timezone": {
+        "identifier": "America\/Sao_Paulo"
+    },
+    "effectiveDate": 606479400,
+    "schedule": {
+        "elements": [
+            {
+                "text": "Breakfast",
+                "duration": {
+                    "seconds": 3600,
+                    "isAllDay": false
+                },
+                "interval": {
+                    "minute": 0,
+                    "hour": 0,
+                    "second": 0,
+                    "day": 1,
+                    "month": 0,
+                    "year": 0,
+                    "weekOfYear": 0
+                },
+                "targetValues": [],
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "start": 606479400
+            },
+            {
+                "text": "Lunch",
+                "duration": {
+                    "seconds": 3600,
+                    "isAllDay": false
+                },
+                "interval": {
+                    "minute": 0,
+                    "hour": 0,
+                    "second": 0,
+                    "day": 1,
+                    "month": 0,
+                    "year": 0,
+                    "weekOfYear": 0
+                },
+                "targetValues": [],
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "start": 606495600
+            },
+            {
+                "text": "Dinner",
+                "duration": {
+                    "seconds": 3600,
+                    "isAllDay": false
+                },
+                "interval": {
+                    "minute": 0,
+                    "hour": 0,
+                    "second": 0,
+                    "day": 1,
+                    "month": 0,
+                    "year": 0,
+                    "weekOfYear": 0
+                },
+                "targetValues": [],
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "start": 606515400
+            }
+        ]
+    }
+}

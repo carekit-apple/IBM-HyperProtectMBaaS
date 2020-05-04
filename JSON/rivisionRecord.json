@@ -1,0 +1,156 @@
+{
+    "knowledgeVector": {
+        "processes": [
+            "F6ADC9C7-EC04-41A6-9256-422E213FBB33",
+            1
+        ]
+    },
+    "entities": [
+        {
+            "type": "task",
+            "object": {
+                "title": "title",
+                "tags": [
+                    "tag",
+                    "tag2"
+                ],
+                "updatedDate": 608921849.74262798,
+                "uuid": "09844E39-A9F9-4678-B588-F93BE68B01A7",
+                "instructions": "instructions",
+                "schedule": {
+                    "elements": [
+                        {
+                            "text": "Breakfast",
+                            "duration": {
+                                "seconds": 3600,
+                                "isAllDay": false
+                            },
+                            "interval": {
+                                "day": 1
+                            },
+                            "targetValues": [],
+                            "start": 608898600
+                        },
+                        {
+                            "text": "Lunch",
+                            "duration": {
+                                "seconds": 3600,
+                                "isAllDay": false
+                            },
+                            "interval": {
+                                "day": 1
+                            },
+                            "targetValues": [],
+                            "start": 608914800
+                        },
+                        {
+                            "text": "Dinner",
+                            "duration": {
+                                "seconds": 3600,
+                                "isAllDay": false
+                            },
+                            "interval": {
+                                "day": 1
+                            },
+                            "targetValues": [],
+                            "start": 608934600
+                        }
+                    ]
+                },
+                "userInfo": {
+                    "user": "info"
+                },
+                "remoteID": "remoteID",
+                "id": "id",
+                "carePlanUUID": "EEAEB642-D2A9-4B4D-966E-DF23B6B6755C",
+                "nextVersionUUID": "69E2E484-1CE0-4FC2-9607-641C3424B3AE",
+                "asset": "asset",
+                "createdDate": 608921849.74262798,
+                "schemaVersion": {
+                    "majorVersion": 3,
+                    "minorVersion": 0,
+                    "patchNumber": 1
+                },
+                "impactsAdherence": true,
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "notes": [
+                    {
+                        "author": "author",
+                        "title": "title",
+                        "content": "content",
+                        "timezone": {
+                            "identifier": "America\/Sao_Paulo"
+                        }
+                    }
+                ],
+                "effectiveDate": 608921849.74263,
+                "groupIdentifier": "groupIdentifier",
+                "previousVersionUUID": "97925E4C-A35D-417E-A5DA-3E6556E72710",
+                "deletedDate": 608921849.74262905
+            }
+        },
+        {
+            "type": "outcome",
+            "object": {
+                "uuid": "4318A945-0924-47B8-A41C-66957780EB0F",
+                "createdDate": 608921849.74319994,
+                "tags": [
+                    "tag1",
+                    "tag2"
+                ],
+                "updatedDate": 608921849.74319994,
+                "source": "source",
+                "values": [
+                    {
+                        "schemaVersion": null,
+                        "uuid": null,
+                        "index": 42,
+                        "createdDate": 608921849.74305701,
+                        "tags": [
+                            "string1",
+                            "string2"
+                        ],
+                        "updatedDate": null,
+                        "units": "units",
+                        "value": 42,
+                        "type": "integer",
+                        "remoteID": null,
+                        "group": "groupIdentifier",
+                        "source": "source",
+                        "timezone": {
+                            "identifier": "America\/Sao_Paulo"
+                        },
+                        "kind": "king",
+                        "userInfo": {
+                            "user": "info"
+                        }
+                    }
+                ],
+                "taskUUID": "09844E39-A9F9-4678-B588-F93BE68B01A7",
+                "remoteID": "remoteID",
+                "taskOccurrenceIndex": 1,
+                "asset": "asset",
+                "groupIdentifier": "groupIdentifier",
+                "deletedDate": 608921850.74319994,
+                "notes": [
+                    {
+                        "author": "author",
+                        "title": "title",
+                        "content": "content",
+                        "timezone": {
+                            "identifier": "America\/Sao_Paulo"
+                        }
+                    }
+                ],
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "userInfo": {
+                    "user": "info"
+                }
+            }
+        }
+    ]
+}
