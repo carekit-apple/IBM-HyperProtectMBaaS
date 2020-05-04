@@ -30,16 +30,16 @@
 
  import "reflect-metadata";
  import { createConnection } from "typeorm";
- import * as express from "express";
- import * as helmet from "helmet";
- import * as morgan from "morgan";
- import * as cors from "cors";
+ import express = require("express");
+ import helmet = require("helmet");
+ import morgan = require("morgan");
+ import cors = require("cors");
  import routes from "./routes/routes";
- import * as config from "config";
+ import config = require("config");
  import { createOrIncrementClock } from "./utils";
- import * as dotenv from "dotenv";
- import * as fs from "fs";
- import * as https from "https";
+ import dotenv = require("dotenv");
+ import fs = require("fs");
+ import https = require("https");
 
  dotenv.config();
  const options = {
