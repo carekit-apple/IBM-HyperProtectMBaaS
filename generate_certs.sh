@@ -4,7 +4,7 @@
 
 main() {
   # rootCA.key
-  openssl genrsa -out $PWD/certs/rootCA.key 4096
+  openssl genrsa -out $PWD/IBM-HyperProtectMBaaS/certs/rootCA.key 4096
   # rootCA.crt
   openssl req -x509 -new -nodes -key $PWD/IBM-HyperProtectMBaaS
 /certs/rootCA.key -sha256 -days 1024 -out $PWD/IBM-HyperProtectMBaaS
