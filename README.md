@@ -1,4 +1,23 @@
+# IBM Hyper Protect MBaaS
+
+The IBM Hyper Protect Mobile-Backend-as-a-Service (MBaaS) is a mediator between the [IBM Hyper Protect SDK for CareKit](https://github.com/carekit-apple/IBM-HyperProtectSDK) and IBM Hyper Protect DBaaS. It must run on IBM Hyper Protect Virtual Servers to prevent this from becoming the weak link in your topology.
+
+_Note, this is a pre-1.0 release and is still in alpha_
+
+### Roadmap
+
+- [ ] Logging with log4js
+- [ ] OAuth2 support with JWT
+- [ ] Bi-directional Synchronization of other high level entities (Contact, CarePlan, Patient)
+- [ ] Comprehensive integration tests
+- [ ] Comprehensive system tests
+- [ ] OpenAPI Specification template
+- [ ] IBM Cloud Starter Kit support
+- [ ] Travis Build Support
+
 ## Instructions to build and run
+
+> WORK IN PROGRESS
 
 - Ensure you have a MongoDB instance either on [IBM Cloud via Hyper Protect DBaaS](https://www.ibm.com/cloud/hyper-protect-dbaas) or locally (steps below).
 - `npm install` to install dependencies
@@ -46,51 +65,3 @@ createConnection({
 The Swift->TypeScript data-structure converson was performed using: https://app.quicktype.io/. If any of the OCKxxx Classes/Structs/Enums/Protocols change, the changes will need to be reflected in the respective [entity][src/entity/*.ts] files. Out-of-sync structures will not lead to failure but to out-of-sync collection schema's between the iOS Core Data structures and the MongoDB backend. This can be tuned to fail instead.
 
 ### Synchronization of data structures:
-
-### Useful Mongo Queries:
-
-Delete duplicates (with same uuid):
-
-```javascript
-var duplicates = [];
-
-db.getCollection("ock_outcome")
-  .aggregate(
-    [
-      {
-        $match: {
-          name: { $ne: "" }, // discard selection criteria
-        },
-      },
-      {
-        $group: {
-          _id: { uuid: "$uuid" }, // can be grouped on multiple properties
-          dups: { $addToSet: "$_id" },
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $match: {
-          count: { $gt: 1 }, // Duplicates considered as count greater than one
-        },
-      },
-    ],
-    { allowDiskUse: true } // For faster processing if set is larger
-  ) // You can display result until this and check duplicates
-  .forEach(function (doc) {
-    doc.dups.shift(); // First element skipped for deleting
-    doc.dups.forEach(function (dupId) {
-      duplicates.push(dupId); // Getting all duplicate ids
-    });
-  });
-
-// If you want to Check all "_id" which you are deleting else print statement not needed
-printjson(duplicates);
-
-// Remove all duplicates in one go
-db.getCollection("ock_outcome").remove({ _id: { $in: duplicates } });
-```
-
-```javascript
-db.getCollection("ock_task_copy").update({}, { $pull: { "kv.processes": { id: null } } }, { multi: true });
-```
