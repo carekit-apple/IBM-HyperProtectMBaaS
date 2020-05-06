@@ -33,7 +33,7 @@ import { getMongoRepository } from "typeorm";
 import { OCKOutcome } from "./entity/OCKOutcome";
 import { UUID } from "./entity/uuid";
 import uuid_lib = require("uuid");
-import { isNotEmpty } from "class-validator";
+import { isEmpty, isNotEmpty } from "class-validator";
 import assert from "assert";
 
 export let uuid: string = "";
@@ -81,18 +81,22 @@ export async function createOrIncrementClock(increment: boolean = true) {
 }
 
 /**
- * Adds new (unknown) clocks to local db. This method does not increment any clocks.
+ * Adds new (unknown) clocks to local db. It will set local clock to the max of twc clocks
  *
  * @param processes clocks (typically from a knowledge vector )
  */
-export async function mergeNewClocksWithExisting(processes: Process[]) {
+export async function mergeKnowledgeVectors(processes: Process[]) {
   let clockRepo = getMongoRepository(Process);
 
   for (const process of processes) {
     const processExists = await clockRepo.findOne({ id: process.id });
-    if (isNotEmpty(processExists)) {
+    if (isEmpty(processExists)) {
       assert(isNotEmpty(process.id));
       await clockRepo.save(process);
+    } else {
+      assert(process.id === processExists.id);
+      const maxClock = Math.max(processExists.clock, process.clock);
+      if (maxClock === process.clock) await clockRepo.updateOne({ id: process.id }, { $set: { clock: maxClock } });
     }
   }
 }
@@ -109,19 +113,10 @@ export async function getLatestKnowledgeVector(): Promise<KnowledgeVector> {
   // paranoid check to ensure quality of UUID data in db
   clocks.forEach((process) => assert(isNotEmpty(process.id)));
 
-  // FIXME : TypeORM bug
   // Removes _id field
   kv.processes = clocks.map(({ _id, ...item }) => item) as Process[];
 
   return kv;
-}
-
-/**
- * Merges knowledgeVector with existing (local) knowledge vector (i.e all clocks stored in MongoDB)
- */
-export async function mergeKnowledgeVectors(kvToMerge : KnowledgeVector) {
-  let currentKV = await getLatestKnowledgeVector();
-  await getMongoRepository(Process).save(currentKV.merge(kvToMerge).processes);
 }
 
 /**

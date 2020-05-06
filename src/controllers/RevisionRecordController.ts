@@ -87,7 +87,7 @@ class RevisionRecordController {
       return;
     }
 
-    console.log(util.inspect(incomingKV, false, null, true /* enable colors */));
+    //console.log(util.inspect(incomingKV, false, null, true /* enable colors */));
 
     let returnRevRecord = new OCKRevisionRecord();
     returnRevRecord.entities = [];
@@ -240,7 +240,7 @@ class RevisionRecordController {
       return;
     }
 
-    await mergeKnowledgeVectors(revRecord.knowledgeVector);
+    await mergeKnowledgeVectors(revRecord.knowledgeVector.processes);
     await createOrIncrementClock(); // increment after merging a revision
 
     //If all ok, send 201 response
