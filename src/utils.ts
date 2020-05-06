@@ -98,7 +98,7 @@ export async function mergeNewClocksWithExisting(processes: Process[]) {
 }
 
 /**
- * Gets local knowledge vector (i.e all clocks stores in MongoDB)
+ * Gets local knowledge vector (i.e all clocks stored in MongoDB)
  */
 export async function getLatestKnowledgeVector(): Promise<KnowledgeVector> {
   const clocks = await getMongoRepository(Process).find();
@@ -109,9 +109,19 @@ export async function getLatestKnowledgeVector(): Promise<KnowledgeVector> {
   // paranoid check to ensure quality of UUID data in db
   clocks.forEach((process) => assert(isNotEmpty(process.id)));
 
+  // FIXME : TypeORM bug
   // Removes _id field
   kv.processes = clocks.map(({ _id, ...item }) => item) as Process[];
+
   return kv;
+}
+
+/**
+ * Merges knowledgeVector with existing (local) knowledge vector (i.e all clocks stored in MongoDB)
+ */
+export async function mergeKnowledgeVectors(kvToMerge : KnowledgeVector) {
+  let currentKV = await getLatestKnowledgeVector();
+  await getMongoRepository(Process).save(currentKV.merge(kvToMerge).processes);
 }
 
 /**

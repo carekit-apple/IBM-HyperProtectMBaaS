@@ -40,6 +40,7 @@ import {
   isOutcomeNew,
   deleteExistingOutcomeForUpdate,
   uuid,
+  mergeKnowledgeVectors,
 } from "../utils";
 import { KnowledgeVector, Process } from "../entity/KnowledgeVector";
 import assert from "assert";
@@ -193,7 +194,7 @@ class RevisionRecordController {
                 task.kv = await getLatestKnowledgeVector();
                 console.log(util.inspect(task, false, null, true /* enable colors */));
                 await taskRepository.save(task);
-                await createOrIncrementClock();
+                //await createOrIncrementClock();
               }
             } catch (e) {
               res.status(409).send("Task exists");
@@ -214,7 +215,7 @@ class RevisionRecordController {
                 outcome.kv = await getLatestKnowledgeVector();
                 console.log(util.inspect(outcome, false, null, true /* enable colors */));
                 await outcomeRepository.save(outcome);
-                await createOrIncrementClock();
+                //await createOrIncrementClock();
               }
             } catch (e) {
               res.status(409).send("Error storing outcome");
@@ -226,11 +227,11 @@ class RevisionRecordController {
           case "contact":
           case "patient": {
             res.status(501).send("Unimplemented");
-            break;
+            return;
           }
           default: {
             res.status(400).send("Bad request");
-            break;
+            return;
           }
         }
       }
@@ -238,6 +239,9 @@ class RevisionRecordController {
       res.status(409).send("Error processing request");
       return;
     }
+
+    await mergeKnowledgeVectors(revRecord.knowledgeVector);
+    await createOrIncrementClock(); // increment after merging a revision
 
     //If all ok, send 201 response
     res.status(201).send("RevisionRecord stored");

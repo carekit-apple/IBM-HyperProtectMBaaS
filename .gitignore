@@ -10,3 +10,4 @@ src/migration/*
 .idea/*
 build/*
 *.key
+certs/*

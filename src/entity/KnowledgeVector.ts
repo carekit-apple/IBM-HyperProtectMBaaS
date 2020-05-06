@@ -29,7 +29,7 @@
  */
 
 import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, UpdateDateColumn } from "typeorm";
-import { IsDefined, IsString, IsNotEmpty, ValidateNested } from "class-validator";
+import {IsDefined, IsString, IsNotEmpty, ValidateNested, max} from "class-validator";
 import { jsonObject, jsonMember, jsonArrayMember } from "typedjson";
 
 @Entity()
@@ -49,12 +49,6 @@ export class Process {
   @jsonMember
   @IsNotEmpty()
   clock: number;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 
   constructor(id: string, clock: number) {
     this.id = id;
@@ -77,7 +71,7 @@ export class Process {
 
 @jsonObject
 export class KnowledgeVector {
-  @Column({ type: Process, array: true })
+  @Column({type: Process, array: true})
   @IsDefined()
   @jsonArrayMember(Process)
   @ValidateNested()
@@ -95,15 +89,35 @@ export class KnowledgeVector {
    * processes1 = [{ id : "A" , clock : 1 }, { id : "B" , clock : 2}]
    * processes2 = [{ id : "A" , clock : 1 }, { id : "B" , clock : 3}, { id : "C" , clock : 1}]
    *
-   * @param rhs
+   * @param rhs knowledge vector to compare to
    */
   lessThanOrEqualTo(rhs: KnowledgeVector) {
-    for (let lhsProcess of this.processes) {
+    for (let lhsProcess of this.processes)
       for (let rhsProcess of rhs.processes)
-        if (lhsProcess.greaterThan(rhsProcess)) {
+        if (lhsProcess.greaterThan(rhsProcess))
           return false;
-        }
-    }
     return true;
+  }
+
+  /**
+   * TODO Optimize with sets
+   * @param other knowledge vector to merge with
+   */
+  merge(other: KnowledgeVector) : KnowledgeVector {
+    let processes : Process[] = [];
+    let mergedWithDups = [...this.processes, ...other.processes];
+
+    for (let process of mergedWithDups) {
+      // id dup found
+      let dupIndex = mergedWithDups.findIndex(a => a.id === process.id)
+      if (dupIndex === -1) {
+        processes.push(process);
+      } else {
+        processes.push(new Process(process.id, Math.max(process.clock, mergedWithDups[dupIndex].clock)))
+      }
+    }
+    let kv = new KnowledgeVector()
+    kv.processes = processes;
+    return kv
   }
 }
