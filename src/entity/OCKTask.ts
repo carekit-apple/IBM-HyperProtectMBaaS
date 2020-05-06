@@ -120,10 +120,13 @@ export class Schedule {
 @Entity()
 export class OCKTask {
   @ObjectIdColumn()
-  id: ObjectID;
+  _id: ObjectID;
 
   @Column()
   title: string;
+
+  @Column()
+  id: string;
 
   @Column({ array: true })
   tags: string[];

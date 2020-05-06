@@ -102,7 +102,7 @@ export class Value {
 @Entity()
 export class OCKOutcome {
   @ObjectIdColumn()
-  id: ObjectID;
+  _id: ObjectID;
 
   @Column()
   uuid: string;
