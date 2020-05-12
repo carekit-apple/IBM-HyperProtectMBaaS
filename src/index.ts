@@ -52,7 +52,7 @@ const options = {
 
 // check env variable for MONGO_DB value - default is localhost (127.0.0.1)
 if (process.env.MONGO_DB === "localhost") {
-  options.url = "mongodb://mongo:27017/mongo-test";
+  options.url = "mongodb://localhost:27017/";
 } else {
   const ca = [fs.readFileSync(__dirname + "/cert.pem")];
   options.url = process.env.MONGO_DB;
@@ -85,8 +85,13 @@ createConnection(options)
       res.send("Backend SDK is running");
     });
 
-    http.createServer(app).listen(port, function () {
-      console.log("Example app listening on port 3000! Go to http://localhost:3000/");
-    });
-  })
-  .catch((error) => console.log(error));
+     const carekit_key = fs.readFileSync(__dirname + '/carekit-sdk.key');
+     const carekit_crt = fs.readFileSync(__dirname + '/carekit-sdk.crt');
+
+     https.createServer({
+     key: carekit_key, cert: carekit_crt,}, app)
+     .listen(port, function () {
+       console.log('CareKit Backend SDK is running!');
+     });
+   })
+     .catch((error) => console.log(error));
