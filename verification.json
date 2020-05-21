@@ -1,0 +1,112 @@
+{
+    "entities": [
+        {
+            "type": "task",
+            "object": {
+                "schemaVersion": {
+                    "majorVersion": 2,
+                    "minorVersion": 0,
+                    "patchNumber": 4
+                },
+                "id": "nausea",
+                "uuid": "75EE244A-7303-43CF-9AA5-6CC3BB81210A",
+                "createdDate": 609212115.685683,
+                "updatedDate": 609212115.685702,
+                "title": "Track your nausea",
+                "notes": [],
+                "timezone": {
+                    "identifier": "America/Sao_Paulo"
+                },
+                "instructions": "Tap the button below anytime you experience nausea.",
+                "impactsAdherence": false,
+                "effectiveDate": 608785200,
+                "schedule": {
+                    "elements": [
+                        {
+                            "text": "Anytime throughout the day",
+                            "duration": {
+                                "isAllDay": true
+                            },
+                            "interval": {
+                                "minute": 0,
+                                "hour": 0,
+                                "second": 0,
+                                "day": 1,
+                                "month": 0,
+                                "year": 0,
+                                "weekOfYear": 0
+                            },
+                            "targetValues": [],
+                            "start": 608785200
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "task",
+            "object": {
+                "schemaVersion": {
+                    "majorVersion": 2,
+                    "minorVersion": 0,
+                    "patchNumber": 4
+                },
+                "id": "doxylamine",
+                "uuid": "C0861A29-C726-4B58-B3AB-89CF3E3294F6",
+                "createdDate": 609212115.696223,
+                "updatedDate": 609212115.696224,
+                "title": "Take Doxylamine",
+                "notes": [],
+                "timezone": {
+                    "identifier": "America/Sao_Paulo"
+                },
+                "instructions": "Take 25mg of doxylamine when you experience nausea.",
+                "impactsAdherence": true,
+                "effectiveDate": 608814000,
+                "schedule": {
+                    "elements": [
+                        {
+                            "duration": {
+                                "seconds": 0,
+                                "isAllDay": false
+                            },
+                            "interval": {
+                                "minute": 0,
+                                "hour": 0,
+                                "second": 0,
+                                "day": 1,
+                                "month": 0,
+                                "year": 0,
+                                "weekOfYear": 0
+                            },
+                            "targetValues": [],
+                            "start": 608814000
+                        },
+                        {
+                            "duration": {
+                                "seconds": 0,
+                                "isAllDay": false
+                            },
+                            "interval": {
+                                "minute": 0,
+                                "hour": 0,
+                                "second": 0,
+                                "day": 2,
+                                "month": 0,
+                                "year": 0,
+                                "weekOfYear": 0
+                            },
+                            "targetValues": [],
+                            "start": 608835600
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "knowledgeVector": {
+        "processes": [
+            { "id" : "1C43F648-D41A-4A5A-8708-15737425FA7C", "clock" : 2}
+        ]
+    }
+}
