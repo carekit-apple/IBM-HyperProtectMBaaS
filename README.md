@@ -27,32 +27,89 @@ By default, it hosts on port 3000, and expects MongoDB to be available at the de
 
 Database connectivity is provided using Typeorm + the official MongoDB JavaScript client. The database can be changed by switching the metadata on main entities in the the `src/entity/*.ts` to match noSQL (ObjectID, ObjectIDColumn() etc) or Relational (PrimaryGeneratedColumn() etc) and then switching the database name in typeorm. More info:
 
-Type ORM requires database connectivity information either in code or reads from ormconfig.json at the project root by default. For connections involving ssl certs, configuration in code is the only option.
+Type ORM requires database connectivity information either in code or reads from ormconfig.json at the project root by default. For connections involving ssl certs, configuration in code is the only option. 
+
 
 From the Hyper Protect DBaaS Dashboard, copy the connection url. It will look similar to
 `mongodb://dbaasXX.hyperp-dbaas.cloud.ibm.com:XXXX,dbaasYY.hyperp-dbaas.cloud.ibm.com:YYYY,dbaasZZ.hyperp-dbaas.cloud.ibm.com:ZZZZ/admin?replicaSet=replicaSet1`
 
-Note, you will need to save the Username and Password when you create your instance as it will never be visible again. Either add the user:pass to the URL above : `mongodb://user:pass@dbaasXX.` or pass it in as a variable to `createConnection()`. The latter is preferred as it can include reading from env variables instead of having credentials in clear-text in code. You will also need to save the ca cert file and consume in the code using
+Note, you will need to save the Username and Password when you create your instance as it will never be visible again. Add the user:pass to the URL above : `mongodb://user:pass@dbaasXX.` and store within the `.env` file as the `MONGO_DB` value. This connection url will be passed automatically to the typeorm createConnection api via env variable. The last necessary step is to download the DBaaS CA cert.pem file from the Cloud Dashboard, which must be saved in the src/ directory. 
 
-```javascript
-const ca = [fs.readFileSync(__dirname + "/cert.pem")];
+```bash
+$ cat .env 
+MONGO_DB=mongodb://admin:dbaasPassword123@dbaasXX.hyperp-dbaas.cloud.ibm.com:XXXX,dbaasYY.hyperp-dbaas.cloud.ibm.com:YYYY,dbaasZZ.hyperp-dbaas.cloud.ibm.com:ZZZZ/admin?replicaSet=Cluster_1_Example
 ```
 
-```javascript
-createConnection({
-  type: "mongodb",
-  url:
-    "mongodb://dbaasXX.hyperp-dbaas.cloud.ibm.com:XXXX,dbaasYY.hyperp-dbaas.cloud.ibm.com:YYYY,dbaasZZ.hyperp-dbaas.cloud.ibm.com:ZZZZ/admin?replicaSet=replicaSet1",
-  database : "carekit",
-  username : "",
-  password : "",
-  ssl: true,
-  sslCA: ca,
- entities: [
-    `${__dirname}/entity/**/*`,
-  ],
-}).
+**Note**: If an IBM DBaaS MongoDB connection string will **not** being used, simply set the `MONGO_DB` environmental variable to 'localhost' to utilize mongodb locally. 
+
+Next, the `generate_certs.sh` shell script must be run, which will create all of the necessary SSL keys and certificates in order to build and run this application. One argument is required when running this script, and is dependent on what the  _Common Name_ value needs to be. 
+
+To run locally using `npm start` use: localhost
+
+**Note**: If building the application on a Virtual Server use the public IP address of the HPVS instance in lieu of the'localhost' argument.
+
+```bash
+$ sudo ./generate_certs.sh localhost
+Password:
+Generating RSA private key, 4096 bit long modulus
+..............................................................................++
+........................++
+e is 65537 (0x10001)
+Generating RSA private key, 2048 bit long modulus
+............................................+++
+.....................................................+++
+e is 65537 (0x10001)
+Signature ok
+subject=/C=US/ST=NC/O=IBM/CN=localhost
+Getting CA Private Key
 ```
+
+Now that the certificates have been created, the `.env` file has been modified with the proper MongoDB connection string, we are ready to build and run the application. Run the _npm_ commands listed below to finish the build and run the application. 
+
+**Prior** to running the _npm_ commands: If a DBaaS MongoDB connection string is **not** being used and 'localhost' was defined as the env variable , run the following command first:
+```bash
+docker run -d -p 27017-27019:27017-27019 --name mongodb mongo
+```
+
+1. npm install
+2. npm start
+
+The output will look similar to this:
+```bash
+$ npm  install
+npm WARN hyper-protect-sdk-backend@0.0.1 No repository field.
+npm WARN hyper-protect-sdk-backend@0.0.1 No license field.
+
+audited 735 packages in 1.835s
+found 0 vulnerabilities
+
+$ npm start
+
+> hyper-protect-sdk-backend@0.0.1 start /Users/dev/IBM-HyperProtectMBaaS
+> set debug=* && ts-node-dev --respawn --transpileOnly ./src/index.ts
+
+Using ts-node version 8.10.1, typescript version 3.8.3
+(node:34241) DeprecationWarning: current Server Discovery and Monitoring engine is deprecated, and will be removed in a future version. To use the new Server Discover and Monitoring engine, pass option { useUnifiedTopology: true } to the MongoClient constructor.
+UUID : 9DB09908-F6CB-4FBC-B1B7-28BE697FAA96
+CareKit Backend SDK is running!
+```
+<br/>
+
+**Validation**
+
+We can validate that the app is running by simply issuing a curl command in another terminal window, then checking the `npm start` window for successful connections. The SSL certificate required for the --cacert argument is named _carekit--root.crt_, and is located in the src folder.
+
+```bash
+$ curl --cacert src/carekit-root.crt --location --request POST 'https://localhost:3000/revisionRecord' --header 'Content-Type: application/json' --data @verification.json
+RevisionRecord stored
+```
+In the `npm start` window we should see a new line of text similar to: 
+```bash
+::ffff:127.0.0.1 - POST /revisionRecord HTTP/1.1 201 21 - 197.409 ms
+```
+
+**The Backend SDK app is now running!**
+
 
 ## For local-dev:
 
