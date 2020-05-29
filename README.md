@@ -97,12 +97,28 @@ CareKit Backend SDK is running!
 
 **Validation**
 
-We can validate that the app is running by simply issuing a curl command in another terminal window, then checking the `npm start` window for successful connections. The SSL certificate required for the --cacert argument is named _carekit--root.crt_, and is located in the src folder.
+We can validate that the app is running and configured correctly by simply running the predefined validation test, which uses the 'jest' npm package. If the test was run successfully the `npm start` window will have populated a new entry containing a `201` response. 
+
+To run the test, please use the `npm run test` command in a different terminal window (or tab) as depicted below. Please ensure that the directory in the recently opened terminal window/tab is pointed towards the locally cloned **IBM-HyperProtectMBaaS** repo.
 
 ```bash
-$ curl --cacert src/carekit-root.crt --location --request POST 'https://localhost:3000/revisionRecord' --header 'Content-Type: application/json' --data @verification.json
-RevisionRecord stored
+$ npm run test
+
+> ibm-hyperprotect-mbaas@0.0.1 test /Users/ryley.wharton1ibm.com/Documents/Github/IBM-HyperProtectMBaaS
+> jest
+
+(node:13022) ExperimentalWarning: The fs.promises API is experimental
+ PASS  __test__/BackendSDKValidationTest.spec.js
+  BackendSDK CareKit Function
+    ✓ Testing POST calls to Backend SDK (7 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.575 s
+Ran all test suites.
 ```
+
 In the `npm start` window we should see a new line of text similar to: 
 ```bash
 ::ffff:127.0.0.1 - POST /revisionRecord HTTP/1.1 201 21 - 197.409 ms
