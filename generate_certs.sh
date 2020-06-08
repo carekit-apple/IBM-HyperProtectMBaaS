@@ -27,13 +27,14 @@ generateCerts() {
   openssl genrsa -out $PWD/carekit-sdk.key 2048
   openssl req -new -sha256 -key $PWD/carekit-sdk.key -subj "/C=US/ST=NC/O=IBM/CN=$CN" -out $PWD/carekit-sdk.csr
   openssl x509 -req -in $PWD/carekit-sdk.csr -CA $PWD/carekit-root.crt -CAkey $PWD/carekit-root.key -CAcreateserial -out $PWD/carekit-sdk.crt -days 500 -sha256
+
   # Logic to copy keys over if script is run on HPVS
   if [ $REPO ]
   then
-    cp carekit* $PWD/$REPO/
+    cp carekit* $PWD/$REPO/src/
+  else
+    mv carekit* $PWD/src/
   fi
-  # moving certificates to src directory for app
-  mv carekit* $PWD/src/
 }
 
 ####################
