@@ -14,6 +14,7 @@ _Note, this is a pre-1.0 release and is still in alpha_
 - [ ] OpenAPI Specification template
 - [ ] IBM Cloud Starter Kit support
 - [ ] Travis Build Support
+- [ ] Large object support ( > 16 MB)
 
 ## Instructions to build and run
 
@@ -137,4 +138,6 @@ In the `npm start` window we should see a new line of text similar to:
 
 The Swift->TypeScript data-structure converson was performed using: https://app.quicktype.io/. If any of the OCKxxx Classes/Structs/Enums/Protocols change, the changes will need to be reflected in the respective [entity][src/entity/*.ts] files. Out-of-sync structures will not lead to failure but to out-of-sync collection schema's between the iOS Core Data structures and the MongoDB backend. This can be tuned to fail instead.
 
-### Synchronization of data structures:
+### Self-Paced Lab:
+
+Detailed end-to-end instructions for deploying the frontend ([IBM Hyper Protect SDK for CareKit](https://github.com/carekit-apple/IBM-HyperProtectSDK)) and the MBaaS (this project) with a CareKit sample app are provided [here](https://github.com/THINKLab2020/carekit-hyperprotect-lab).
