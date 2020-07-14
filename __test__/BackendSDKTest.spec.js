@@ -33,3 +33,4 @@ describe("BackendSDK CareKit Function", () => {
     }
     output(options);
   });
+});
