@@ -50,7 +50,7 @@ To run locally using `npm start` use: localhost
 **Note**: If building the application on a Virtual Server use the public IP address of the HPVS instance in lieu of the'localhost' argument.
 
 ```bash
-$ sudo ./generate_certs.sh localhost
+$ sudo ./generate_certs.sh -c localhost
 Password:
 Generating RSA private key, 4096 bit long modulus
 ..............................................................................++
