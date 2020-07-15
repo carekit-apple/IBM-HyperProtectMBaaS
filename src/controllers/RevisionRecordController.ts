@@ -1,21 +1,21 @@
 /*
  Copyright (c) 2020, International Business Machines All rights reserved.
- 
+
  Redistribution and use in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
- 
+
  1.  Redistributions of source code must retain the above copyright notice, this
  list of conditions and the following disclaimer.
- 
+
  2.  Redistributions in binary form must reproduce the above copyright notice,
  this list of conditions and the following disclaimer in the documentation and/or
  other materials provided with the distribution.
- 
+
  3. Neither the name of the copyright holder(s) nor the names of any contributors
  may be used to endorse or promote products derived from this software without
  specific prior written permission. No license is granted to the trademarks of
  the copyright holders even if such marks are included in this software.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -33,6 +33,9 @@ import { getRepository, getMongoRepository } from "typeorm";
 import { OCKRevisionRecord } from "../entity/OCKRevisionRecord";
 import { OCKTask } from "../entity/OCKTask";
 import { OCKOutcome } from "../entity/OCKOutcome";
+import { OCKPatient } from "../entity/OCKPatient";
+import { OCKContact } from "../entity/OCKContact";
+import { OCKCarePlan } from "../entity/OCKCarePlan";
 import * as util from "util";
 import {
   createOrIncrementClock,
@@ -47,6 +50,8 @@ import assert from "assert";
 import { isEmpty, isNotEmpty, isUUID, validate } from "class-validator";
 import { TypedJSON } from "typedjson";
 import Ajv from "ajv";
+import { processEntity } from "./EnableEntity";
+
 export const kvSchema = require("../jsonSchema/knowledgeVector.json");
 
 class RevisionRecordController {
@@ -184,50 +189,39 @@ class RevisionRecordController {
 
       for (let entity of revRecord.entities) {
         switch (entity.type) {
-          case "task":
+
+          case "task": {
             const taskRepository = getMongoRepository(OCKTask);
-            try {
-              const taskExists = await taskRepository.findOne({ uuid: entity.object.uuid });
-              // if task exists, don't overwrite
-              if (isEmpty(taskExists)) {
-                const task = taskRepository.create(entity.object);
-                task.kv = await getLatestKnowledgeVector();
-                console.log(util.inspect(task, false, null, true /* enable colors */));
-                await taskRepository.save(task);
-                //await createOrIncrementClock();
-              }
-            } catch (e) {
-              res.status(409).send("Task exists");
-              return;
-            }
+            await processEntity(entity, taskRepository);
             break;
+          }
           case "outcome": {
             const outcomeRepository = getMongoRepository(OCKOutcome);
             // if this is an update, delete old version
             if (!(await isOutcomeNew(entity.object))) {
               await deleteExistingOutcomeForUpdate(entity.object);
             }
-            try {
-              const outcomeExists = await outcomeRepository.findOne({ uuid: entity.object.uuid });
-              // if outcome exists, don't overwrite. Update scenario was handled above
-              if (isEmpty(outcomeExists)) {
-                const outcome = outcomeRepository.create(entity.object);
-                outcome.kv = await getLatestKnowledgeVector();
-                console.log(util.inspect(outcome, false, null, true /* enable colors */));
-                await outcomeRepository.save(outcome);
-                //await createOrIncrementClock();
-              }
-            } catch (e) {
-              res.status(409).send("Error storing outcome");
-              return;
-            }
+            await processEntity(entity, outcomeRepository);
             break;
           }
-          case "careplan":
-          case "contact":
+          case "careplan": {
+            const careplanRepository = getMongoRepository(OCKCarePlan);
+            await processEntity(entity, careplanRepository);
+            break;
+          }
+          case "contact": {
+            const contactRepository = getMongoRepository(OCKContact);
+            // if this is an update, delete old version
+            if (!(await isOutcomeNew(entity.object))) {
+              await deleteExistingOutcomeForUpdate(entity.object);
+            }
+            await processEntity(entity, contactRepository);
+            break;
+          }
           case "patient": {
-            res.status(501).send("Unimplemented");
-            return;
+            const patientRepository = getMongoRepository(OCKPatient);
+            await processEntity(entity, patientRepository);
+            break;
           }
           default: {
             res.status(400).send("Bad request");
