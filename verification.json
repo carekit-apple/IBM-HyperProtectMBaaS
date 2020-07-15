@@ -3,105 +3,194 @@
         {
             "type": "task",
             "object": {
-                "schemaVersion": {
-                    "majorVersion": 2,
-                    "minorVersion": 0,
-                    "patchNumber": 4
-                },
-                "id": "nausea",
-                "uuid": "75EE244A-7303-43CF-9AA5-6CC3BB81210A",
-                "createdDate": 609212115.685683,
-                "updatedDate": 609212115.685702,
-                "title": "Track your nausea",
-                "notes": [],
-                "timezone": {
-                    "identifier": "America/Sao_Paulo"
-                },
-                "instructions": "Tap the button below anytime you experience nausea.",
-                "impactsAdherence": false,
-                "effectiveDate": 608785200,
-                "schedule": {
-                    "elements": [
-                        {
-                            "text": "Anytime throughout the day",
-                            "duration": {
-                                "isAllDay": true
-                            },
-                            "interval": {
-                                "minute": 0,
-                                "hour": 0,
-                                "second": 0,
-                                "day": 1,
-                                "month": 0,
-                                "year": 0,
-                                "weekOfYear": 0
-                            },
-                            "targetValues": [],
-                            "start": 608785200
+              "schemaVersion": {
+                "majorVersion": 2,
+                "minorVersion": 0,
+                "patchNumber": 1
+              },
+              "createdDate": 606516270.724944,
+              "id": "abc123",
+              "notes": [],
+              "title": "A",
+              "uuid": "2D7F0E36-3A95-452C-827C-389ADB678972",
+              "impactsAdherence": true,
+              "updatedDate": 606516270.72494602,
+              "timezone": {
+                "identifier": "America\/Sao_Paulo"
+              },
+              "effectiveDate": 606479400,
+              "schedule": {
+                  "elements": [
+                    {
+                      "text": "Breakfast",
+                      "duration": {
+                        "seconds": 3600,
+                    "   isAllDay": false
+                    },
+                    "interval": {
+                        "minute": 0,
+                        "hour": 0,
+                        "second": 0,
+                        "day": 1,
+                        "month": 0,
+                        "year": 0,
+                        "weekOfYear": 0
+                      },
+                      "targetValues": [],
+                      "timezone": {
+                        "identifier": "America\/Sao_Paulo"
+                      },
+                      "start": 606479400
+                    },
+                    {
+                      "text": "Lunch",
+                      "duration": {
+                        "seconds": 3600,
+                        "isAllDay": false
+                      },
+                      "interval": {
+                        "minute": 0,
+                        "hour": 0,
+                        "second": 0,
+                        "day": 1,
+                        "month": 0,
+                        "year": 0,
+                      "weekOfYear": 0
+                    },
+                    "targetValues": [],
+                    "timezone": {
+                      "identifier": "America\/Sao_Paulo"
+                    },
+                    "start": 606495600
+                  },
+                  {
+                    "text": "Dinner",
+                    "duration": {
+                      "seconds": 3600,
+                      "isAllDay": false
+                    },
+                    "interval": {
+                      "minute": 0,
+                      "hour": 0,
+                      "second": 0,
+                      "day": 1,
+                      "month": 0,
+                      "year": 0,
+                      "weekOfYear": 0
+                    },
+                    "targetValues": [],
+                    "timezone": {
+                      "identifier": "America\/Sao_Paulo"
+                    },
+                    "start": 606515400
+                  }
+                ]
+              }
+            }
+        },
+        {
+            "type": "outcome",
+            "object": {
+                "uuid": "4318A945-0924-47B8-A41C-66957780EB0F",
+                "createdDate": 608921849.74319994,
+                "tags": [
+                    "tag1",
+                    "tag2"
+                ],
+                "updatedDate": 608921849.74319994,
+                "source": "source",
+                "values": [
+                    {
+                        "schemaVersion": null,
+                        "uuid": null,
+                        "index": 42,
+                        "createdDate": 608921849.74305701,
+                        "tags": [
+                            "string1",
+                            "string2"
+                        ],
+                        "updatedDate": null,
+                        "units": "units",
+                        "value": 42,
+                        "type": "integer",
+                        "remoteID": null,
+                        "group": "groupIdentifier",
+                        "source": "source",
+                        "timezone": {
+                            "identifier": "America\/Sao_Paulo"
+                        },
+                        "kind": "king",
+                        "userInfo": {
+                            "user": "info"
                         }
-                    ]
+                    }
+                ],
+                "taskUUID": "09844E39-A9F9-4678-B588-F93BE68B01A7",
+                "remoteID": "remoteID",
+                "taskOccurrenceIndex": 1,
+                "asset": "asset",
+                "groupIdentifier": "groupIdentifier",
+                "deletedDate": 608921850.74319994,
+                "notes": [
+                    {
+                        "author": "author",
+                        "title": "title",
+                        "content": "content",
+                        "timezone": {
+                            "identifier": "America\/Sao_Paulo"
+                        }
+                    }
+                ],
+                "timezone": {
+                    "identifier": "America\/Sao_Paulo"
+                },
+                "userInfo": {
+                    "user": "info"
                 }
             }
         },
         {
-            "type": "task",
-            "object": {
-                "schemaVersion": {
-                    "majorVersion": 2,
-                    "minorVersion": 0,
-                    "patchNumber": 4
-                },
-                "id": "doxylamine",
-                "uuid": "C0861A29-C726-4B58-B3AB-89CF3E3294F6",
-                "createdDate": 609212115.696223,
-                "updatedDate": 609212115.696224,
-                "title": "Take Doxylamine",
-                "notes": [],
-                "timezone": {
-                    "identifier": "America/Sao_Paulo"
-                },
-                "instructions": "Take 25mg of doxylamine when you experience nausea.",
-                "impactsAdherence": true,
-                "effectiveDate": 608814000,
-                "schedule": {
-                    "elements": [
-                        {
-                            "duration": {
-                                "seconds": 0,
-                                "isAllDay": false
-                            },
-                            "interval": {
-                                "minute": 0,
-                                "hour": 0,
-                                "second": 0,
-                                "day": 1,
-                                "month": 0,
-                                "year": 0,
-                                "weekOfYear": 0
-                            },
-                            "targetValues": [],
-                            "start": 608814000
-                        },
-                        {
-                            "duration": {
-                                "seconds": 0,
-                                "isAllDay": false
-                            },
-                            "interval": {
-                                "minute": 0,
-                                "hour": 0,
-                                "second": 0,
-                                "day": 2,
-                                "month": 0,
-                                "year": 0,
-                                "weekOfYear": 0
-                            },
-                            "targetValues": [],
-                            "start": 608835600
-                        }
-                    ]
-                }
-            }
+          "type": "patient",
+          "object": {
+            "id": "A",
+            "timezone": {
+                "identifier": "America\/Sao_Paulo"
+            },
+            "name": {
+                "familyName": "Parker",
+                "givenName": "Peter"
+            },
+            "effectiveDate": 607214692.32828295
+          }
+        },
+        {
+          "type": "careplan",
+          "object": {
+            "id": "A",
+            "timezone": {
+              "identifier": "America\/Sao_Paulo"
+            },
+            "name": {
+              "familyName": "Parker",
+              "givenName": "Peter"
+            },
+            "effectiveDate": 607214692.32828295,
+            "title" : "Mr"
+          }
+        },
+        {
+          "type": "contact",
+          "object": {
+            "id": "B",
+            "timezone": {
+              "identifier": "America\/Sao_Paulo"
+            },
+            "name": {
+              "familyName": "Parker",
+              "givenName": "Peter"
+            },
+            "effectiveDate": 607215197.28735197
+          }
         }
     ],
     "knowledgeVector": {
