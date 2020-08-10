@@ -1,3 +1,4 @@
+// @ts-ignore
 /*
  Copyright (c) 2020, International Business Machines All rights reserved.
 
@@ -40,24 +41,31 @@ import { createOrIncrementClock } from "./utils";
 import dotenv = require("dotenv");
 import fs = require("fs");
 import https = require("https");
-import http = require("http");
+import { MongoConnectionOptions } from "typeorm/driver/mongodb/MongoConnectionOptions";
 
 dotenv.config();
-const options = {
-  type: "mongodb",
-  database: "carekit",
-  entities: [`${__dirname}/entity/**/*`],
-  useNewUrlParser: true,
-};
+var options: MongoConnectionOptions;
 
 // check env variable for MONGO_DB value - default is localhost (127.0.0.1)
-if (process.env.MONGO_DB === "localhost") {
-  options.url = "mongodb://localhost:27017/";
+if (process.env.MONGO_DB === "localhost"){
+  options = {
+    type: "mongodb",
+    database: "carekit",
+    entities: [`${__dirname}/entity/**/*`],
+    useNewUrlParser: true,
+    url : "mongodb://localhost:27017/",
+  };
 } else {
   const ca = [fs.readFileSync(__dirname + "/cert.pem")];
-  options.url = process.env.MONGO_DB;
-  options.ssl = true;
-  options.sslCA = ca;
+  options = {
+    type: "mongodb",
+    database: "carekit",
+    entities: [`${__dirname}/entity/**/*`],
+    useNewUrlParser: true,
+    url : process.env.MONGO_DB,
+    ssl : true,
+    sslCA : ca
+  };
 }
 
 createConnection(options)

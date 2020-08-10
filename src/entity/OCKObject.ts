@@ -2,6 +2,7 @@ import { Column } from "typeorm";
 import { Timezone } from "./Timezone";
 import { Schedule } from "./Schedule";
 import { Value } from "./Value";
+import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 export class OCKObject {
   @Column()
@@ -31,7 +32,7 @@ export class OCKObject {
   @Column((type) => Schedule)
   schedule?: Schedule;
 
-  @Column({ type: Value, array: true })
+  @Column((type)=> Value, {array: true} as ColumnEmbeddedOptions)
   values?: Value[];
 
   @Column()

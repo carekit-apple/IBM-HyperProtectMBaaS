@@ -31,7 +31,6 @@
 import { Request, Response } from "express";
 import { getMongoRepository, getRepository } from "typeorm";
 import { OCKCarePlan } from "../entity/OCKCarePlan";
-import * as util from "util";
 import { validate } from "class-validator";
 
 class CarePlanController {

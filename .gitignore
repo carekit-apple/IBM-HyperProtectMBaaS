@@ -11,3 +11,7 @@ src/migration/*
 build/*
 *.key
 certs/*
+.env
+.DS_Store
+src/carekit-root.srl
+src/carekit-sdk.csr

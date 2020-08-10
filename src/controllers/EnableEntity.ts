@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*
  Copyright (c) 2020, International Business Machines All rights reserved.
 
@@ -28,24 +29,14 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
- import { getRepository, getMongoRepository } from "typeorm";
- import { OCKTask } from "../entity/OCKTask";
- import { OCKOutcome } from "../entity/OCKOutcome";
  import * as util from "util";
  import {
-   createOrIncrementClock,
    getLatestKnowledgeVector,
-   isOutcomeNew,
-   deleteExistingOutcomeForUpdate,
-   uuid,
-   mergeKnowledgeVectors,
  } from "../utils";
- import { KnowledgeVector, Process } from "../entity/KnowledgeVector";
- import assert from "assert";
- import { isEmpty, isNotEmpty, isUUID, validate } from "class-validator";
+ import { isEmpty } from "class-validator";
 
-let entity;
-let repository;
+let entity : any;
+let repository : any;
 
 export async function processEntity(...entityParams) {
    if (entityParams) {
@@ -65,7 +56,7 @@ export async function processEntity(...entityParams) {
        //await createOrIncrementClock();
      }
    } catch (e) {
-     res.status(409).send("Entity exists");
+     //res.status(409).send("Entity exists");
      return;
    }
 }

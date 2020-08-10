@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*
  Copyright (c) 2020, International Business Machines All rights reserved.
 

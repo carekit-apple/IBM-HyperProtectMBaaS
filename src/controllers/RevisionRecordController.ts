@@ -1,3 +1,4 @@
+// @ts-nocheck
 /*
  Copyright (c) 2020, International Business Machines All rights reserved.
 
@@ -37,6 +38,7 @@ import { OCKPatient } from "../entity/OCKPatient";
 import { OCKContact } from "../entity/OCKContact";
 import { OCKCarePlan } from "../entity/OCKCarePlan";
 import * as util from "util";
+
 import {
   createOrIncrementClock,
   getLatestKnowledgeVector,

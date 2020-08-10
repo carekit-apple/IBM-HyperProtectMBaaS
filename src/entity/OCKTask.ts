@@ -31,6 +31,7 @@
 import { Column, Entity, ObjectIdColumn, ObjectID, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Timezone } from "./Timezone";
 import { KnowledgeVector } from "./KnowledgeVector";
+import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 export class Note {
   @Column()
@@ -113,7 +114,7 @@ export class Element {
 }
 
 export class Schedule {
-  @Column({ type: Element, array: true })
+  @Column((type)=> Element,  {array: true} as ColumnEmbeddedOptions)
   elements: Element[];
 }
 
@@ -170,7 +171,7 @@ export class OCKTask {
   @Column((type) => Timezone)
   timezone: Timezone;
 
-  @Column({ type: Note, array: true })
+  @Column((type)=> Note, {array: true} as ColumnEmbeddedOptions)
   notes: Note[];
 
   @Column()

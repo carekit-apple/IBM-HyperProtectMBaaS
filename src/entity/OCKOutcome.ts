@@ -32,6 +32,7 @@ import { Column, ObjectID, ObjectIdColumn, Entity, CreateDateColumn, UpdateDateC
 import { Timezone } from "./Timezone";
 import { SchemaVersion } from "./SchemaVersion";
 import { KnowledgeVector } from "./KnowledgeVector";
+import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 export class Note {
   @Column()
@@ -119,7 +120,7 @@ export class OCKOutcome {
   @Column()
   source: string;
 
-  @Column({ type: Value, array: true })
+  @Column((type)=>Value, {array: true} as ColumnEmbeddedOptions)
   values: Value[];
 
   @Column()
@@ -140,7 +141,7 @@ export class OCKOutcome {
   @Column()
   deletedDate: number;
 
-  @Column({ type: Note, array: true })
+  @Column((type)=>Note, {array: true} as ColumnEmbeddedOptions)
   notes: Note[];
 
   @Column((type) => Timezone)

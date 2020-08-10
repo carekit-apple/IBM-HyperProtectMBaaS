@@ -28,9 +28,10 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column } from "typeorm";
+import { Column, Any } from "typeorm";
 import { Duration } from "./Durartion";
 import { Interval } from "./Interval";
+import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 export class Element {
   @Column()
@@ -42,7 +43,7 @@ export class Element {
   @Column((type) => Interval)
   interval: Interval;
 
-  @Column({array: true})
+  @Column((type) => Any, {array: true} as ColumnEmbeddedOptions)
   targetValues: any[];
 
   @Column()

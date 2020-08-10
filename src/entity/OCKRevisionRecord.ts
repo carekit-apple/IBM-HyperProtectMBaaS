@@ -31,6 +31,7 @@
 import { Column, Entity, ObjectIdColumn, ObjectID } from "typeorm";
 import { OCKEntity } from "./OCKEntity";
 import { KnowledgeVector } from "./KnowledgeVector";
+import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 @Entity()
 export class OCKRevisionRecord {
@@ -40,6 +41,6 @@ export class OCKRevisionRecord {
   @Column((type) => KnowledgeVector)
   knowledgeVector: KnowledgeVector;
 
-  @Column({type : OCKEntity, array : true})
+  @Column((type)=> OCKEntity, {array: true} as ColumnEmbeddedOptions)
   entities: OCKEntity[];
 }

@@ -31,7 +31,6 @@
 import { Request, Response } from "express";
 import { getMongoRepository, getRepository } from "typeorm";
 import { OCKOutcome } from "../entity/OCKOutcome";
-import * as util from "util";
 
 class OutcomeController {
   static listAll = async (req: Request, res: Response) => {

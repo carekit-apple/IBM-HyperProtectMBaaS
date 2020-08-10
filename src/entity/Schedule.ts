@@ -30,8 +30,9 @@
 
 import { Column } from "typeorm";
 import { Element } from "./Element";
+import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 export class Schedule {
-  @Column({ type: Element, array: true })
+  @Column((type)=> Element, {array: true} as ColumnEmbeddedOptions)
   elements: Element[];
 }

@@ -28,9 +28,10 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, CreateDateColumn, Entity, ObjectID, ObjectIdColumn, UpdateDateColumn } from "typeorm";
-import {IsDefined, IsString, IsNotEmpty, ValidateNested, max} from "class-validator";
+import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
+import {IsDefined, IsString, IsNotEmpty, ValidateNested} from "class-validator";
 import { jsonObject, jsonMember, jsonArrayMember } from "typedjson";
+import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 @Entity()
 @jsonObject()
@@ -71,7 +72,7 @@ export class Process {
 
 @jsonObject
 export class KnowledgeVector {
-  @Column({type: Process, array: true})
+  @Column((type)=> Process, {array: true} as ColumnEmbeddedOptions)
   @IsDefined()
   @jsonArrayMember(Process)
   @ValidateNested()
