@@ -40,10 +40,10 @@ export class OCKCarePlan {
   @Column()
   id: string;
 
-  @Column((type) => Timezone)
+  @Column("Timezone")
   timezone: Timezone;
 
-  @Column((type) => Name)
+  @Column("Name")
   name: Name;
 
   @Column()

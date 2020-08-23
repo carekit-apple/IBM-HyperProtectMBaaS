@@ -32,7 +32,6 @@ import { Column, ObjectID, ObjectIdColumn, Entity, CreateDateColumn, UpdateDateC
 import { Timezone } from "./Timezone";
 import { SchemaVersion } from "./SchemaVersion";
 import { KnowledgeVector } from "./KnowledgeVector";
-import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 export class Note {
   @Column()
@@ -44,7 +43,7 @@ export class Note {
   @Column()
   content: string;
 
-  @Column((type) => Timezone)
+  @Column("Timezone")
   timezone: Timezone;
 }
 
@@ -54,7 +53,7 @@ export class UserInfo {
 }
 
 export class Value {
-  @Column((type) => SchemaVersion)
+  @Column("SchemaVersion")
   schemaVersion: SchemaVersion;
 
   @Column()
@@ -66,7 +65,7 @@ export class Value {
   @Column()
   createdDate: Date;
 
-  @Column({ array: true })
+  @Column("string")
   tags: string;
 
   @Column()
@@ -90,13 +89,13 @@ export class Value {
   @Column()
   source: string;
 
-  @Column((type) => Timezone)
+  @Column("Timezone")
   timezone: Timezone;
 
   @Column()
   kind: string;
 
-  @Column((type) => UserInfo)
+  @Column("UserInfo")
   userInfo: UserInfo;
 }
 
@@ -111,7 +110,7 @@ export class OCKOutcome {
   @Column()
   createdDate: number;
 
-  @Column({ array: true })
+  @Column("string")
   tags: string[];
 
   @Column()
@@ -120,7 +119,7 @@ export class OCKOutcome {
   @Column()
   source: string;
 
-  @Column((type)=>Value, {array: true} as ColumnEmbeddedOptions)
+  @Column("Value")
   values: Value[];
 
   @Column()
@@ -141,16 +140,16 @@ export class OCKOutcome {
   @Column()
   deletedDate: number;
 
-  @Column((type)=>Note, {array: true} as ColumnEmbeddedOptions)
+  @Column("Note")
   notes: Note[];
 
-  @Column((type) => Timezone)
+  @Column("Timezone")
   timezone: Timezone;
 
-  @Column((type) => UserInfo)
+  @Column("UserInfo")
   userInfo: UserInfo;
 
-  @Column((type) => KnowledgeVector)
+  @Column("KnowledgeVector")
   kv: KnowledgeVector;
 
   @CreateDateColumn()

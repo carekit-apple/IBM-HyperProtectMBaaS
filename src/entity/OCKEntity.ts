@@ -36,6 +36,6 @@ export class OCKEntity {
   @Column()
   type: string;
 
-  @Column((type) => OCKObject)
+  @Column("OCKObject")
   object: OCKObject;
 }

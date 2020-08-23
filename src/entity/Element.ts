@@ -28,22 +28,21 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import { Column, Any } from "typeorm";
+import { Column } from "typeorm";
 import { Duration } from "./Durartion";
 import { Interval } from "./Interval";
-import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 export class Element {
   @Column()
   text: string;
 
-  @Column((type) => Duration)
+  @Column("Duration")
   duration: Duration;
 
-  @Column((type) => Interval)
+  @Column("Interval")
   interval: Interval;
 
-  @Column((type) => Any, {array: true} as ColumnEmbeddedOptions)
+  @Column("Any")
   targetValues: any[];
 
   @Column()

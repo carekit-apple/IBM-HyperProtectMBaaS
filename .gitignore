@@ -13,5 +13,5 @@ build/*
 certs/*
 .env
 .DS_Store
-src/carekit-root.srl
+src/carekit-root*
 src/carekit-sdk.csr

@@ -31,7 +31,6 @@
 import { Column, Entity, ObjectIdColumn, ObjectID, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { Timezone } from "./Timezone";
 import { KnowledgeVector } from "./KnowledgeVector";
-import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 export class Note {
   @Column()
@@ -43,7 +42,7 @@ export class Note {
   @Column()
   content: string;
 
-  @Column((type) => Timezone)
+  @Column("Timezone")
   timezone: Timezone;
 }
 
@@ -97,16 +96,16 @@ export class Element {
   @Column()
   text: string;
 
-  @Column((type) => Duration)
+  @Column("Duration")
   duration: Duration;
 
-  @Column((type) => Interval)
+  @Column("Interval")
   interval: Interval;
 
   @Column()
   targetValues: any[];
 
-  @Column((type) => Timezone)
+  @Column("Timezone")
   timezone: Timezone;
 
   @Column()
@@ -114,7 +113,7 @@ export class Element {
 }
 
 export class Schedule {
-  @Column((type)=> Element,  {array: true} as ColumnEmbeddedOptions)
+  @Column("Element")
   elements: Element[];
 }
 
@@ -129,7 +128,7 @@ export class OCKTask {
   @Column()
   id: string;
 
-  @Column({ array: true })
+  @Column("string")
   tags: string[];
 
   @Column()
@@ -141,10 +140,10 @@ export class OCKTask {
   @Column()
   instructions: string;
 
-  @Column((type) => Schedule)
+  @Column("Schedule")
   schedule: Schedule;
 
-  @Column((type) => UserInfo)
+  @Column("UserInfo")
   userInfo: UserInfo;
 
   @Column()
@@ -162,16 +161,16 @@ export class OCKTask {
   @Column()
   createdDate: number;
 
-  @Column((type) => SchemaVersion)
+  @Column("SchemaVersion")
   schemaVersion: SchemaVersion;
 
   @Column()
   impactsAdherence: boolean;
 
-  @Column((type) => Timezone)
+  @Column("Timezone")
   timezone: Timezone;
 
-  @Column((type)=> Note, {array: true} as ColumnEmbeddedOptions)
+  @Column("Note")
   notes: Note[];
 
   @Column()
@@ -186,7 +185,7 @@ export class OCKTask {
   @Column()
   deletedDate: number;
 
-  @Column((type) => KnowledgeVector)
+  @Column("KnowledgeVector")
   kv: KnowledgeVector;
 
   @CreateDateColumn()

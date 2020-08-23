@@ -68,7 +68,7 @@ export class Value {
   @Column()
   source: string;
 
-  @Column((type) => Timezone)
+  @Column("Timezone")
   timezone: Timezone;
 
   @Column()

@@ -31,7 +31,6 @@
 import { Column, Entity, ObjectID, ObjectIdColumn } from "typeorm";
 import {IsDefined, IsString, IsNotEmpty, ValidateNested} from "class-validator";
 import { jsonObject, jsonMember, jsonArrayMember } from "typedjson";
-import { ColumnEmbeddedOptions } from "typeorm/decorator/options/ColumnEmbeddedOptions";
 
 @Entity()
 @jsonObject()
@@ -72,7 +71,7 @@ export class Process {
 
 @jsonObject
 export class KnowledgeVector {
-  @Column((type)=> Process, {array: true} as ColumnEmbeddedOptions)
+  @Column("Process")
   @IsDefined()
   @jsonArrayMember(Process)
   @ValidateNested()

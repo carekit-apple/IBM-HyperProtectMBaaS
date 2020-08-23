@@ -32,7 +32,7 @@ import { Column } from "typeorm";
 import { OCKEntity } from "./OCKEntity";
 
 export class Operation {
-  @Column((type) => OCKEntity)
+  @Column("OCKEntity")
   entity: OCKEntity;
 
   @Column()
