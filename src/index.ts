@@ -31,16 +31,16 @@
 
 import "reflect-metadata";
 import { createConnection } from "typeorm";
-import express = require("express");
-import helmet = require("helmet");
-import morgan = require("morgan");
-import cors = require("cors");
+import express from "express";
+import helmet from "helmet";
+import morgan from "morgan";
+import cors from "cors";
 import routes from "./routes/routes";
-import config = require("config");
+import config from "config";
 import { createOrIncrementClock } from "./utils";
-import dotenv = require("dotenv");
-import fs = require("fs");
-import https = require("https");
+import dotenv from "dotenv";
+import fs from "fs";
+import https from "https";
 import { MongoConnectionOptions } from "typeorm/driver/mongodb/MongoConnectionOptions";
 
 dotenv.config();
@@ -71,6 +71,8 @@ if (process.env.MONGO_DB === "localhost"){
 createConnection(options)
   .then(async (connection) => {
     const app = express();
+    app.use(express.json({limit: '4mb'}));
+    app.use(express.urlencoded({limit: '4mb'}));
     app.use(cors());
     app.use(helmet());
     app.use(morgan("short"));
@@ -95,11 +97,11 @@ createConnection(options)
 
      const carekit_key = fs.readFileSync(__dirname + '/carekit-sdk.key');
      const carekit_crt = fs.readFileSync(__dirname + '/carekit-sdk.crt');
-
+    
      https.createServer({
-     key: carekit_key, cert: carekit_crt,}, app)
-     .listen(port, function () {
-       console.log('CareKit Backend SDK is running!');
-     });
-   })
+      key: carekit_key, cert: carekit_crt,}, app)
+      .listen(port, function () {
+        console.log('CareKit Backend SDK is running!');
+      });
+    })
      .catch((error) => console.log(error));
