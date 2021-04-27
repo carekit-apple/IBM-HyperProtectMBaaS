@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Generates SSL certificates for CareKit
-
+​
 helpFunction() {      # help function with arg / run instructions
   echo "Usage: "
   echo "$0 -c <CommonName>"
@@ -19,15 +19,16 @@ helpFunction() {      # help function with arg / run instructions
   echo ""
   exit 1
 }
-
+​
 generateCerts() {
-  # Create keys and certs
   openssl genrsa -out $PWD/carekit-root.key 4096
   openssl req -x509 -new -nodes -key $PWD/carekit-root.key -sha256 -days 1024 -out $PWD/carekit-root.crt -subj "/C=US/ST=NC/O=IBM/OU=ZaaS/CN=$CN"
   openssl genrsa -out $PWD/carekit-sdk.key 2048
   openssl req -new -sha256 -key $PWD/carekit-sdk.key -subj "/C=US/ST=NC/O=IBM/CN=$CN" -out $PWD/carekit-sdk.csr
   openssl x509 -req -in $PWD/carekit-sdk.csr -CA $PWD/carekit-root.crt -CAkey $PWD/carekit-root.key -CAcreateserial -out $PWD/carekit-sdk.crt -days 500 -sha256
-
+  openssl x509 -in $PWD/carekit-sdk.crt -out $PWD/carekit-sdk.pem
+  openssl x509 -outform der -in $PWD/carekit-sdk.pem -out $PWD/carekit-sdk.der
+​
   # Logic to copy keys over if script is run on HPVS
   if [ $REPO ]
   then
@@ -36,7 +37,7 @@ generateCerts() {
     mv carekit* $PWD/src/
   fi
 }
-
+​
 ####################
 # main code block
 ####################
@@ -48,17 +49,16 @@ do
       ? ) helpFunction ;; # Print helpFunction in case parameter is non-existent
    esac
 done
-
+​
 if [ -z "$CN" ]
 then
    echo "1 mandatory argument is required: -c {CommonName}";
    helpFunction
 fi
-
+​
 # Generate certificates based on parameters and arguments provided
 if [[ $REPO ]]; then
   generateCerts $CN $REPO
 else
   generateCerts $CN
 fi
-
