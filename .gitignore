@@ -15,3 +15,4 @@ certs/*
 .DS_Store
 src/carekit-root*
 src/carekit-sdk.csr
+bootstrapping.md
