@@ -2,63 +2,42 @@
   - using 'jest' npm package
   - POST is issued using 'verification.json' file as data
   
-  Use command 'npm run test' to initiate validation test
+  Use command 'npm test' to initiate validation test
 */
+const https = require("https");
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
 
-const fs = require('fs');
-const path = require('path');
-const request = require('request');
-const diff = require('json-diff');
+// setup the cert
+const cacert = fs.readFileSync(
+  path.resolve(__dirname + "../../src/carekit-root.crt")
+);
+const httpsAgent = new https.Agent({ ca: cacert });
+axios.defaults.httpsAgent = httpsAgent;
+
+const input = require(path.resolve(__dirname + "../../verification.json"));
 
 describe("Testing MBaaS functionality", () => {
-  test("Testing POST call to Backend SDK", () => {
-    // code to test goes here
-    const input = require(path.resolve(__dirname + '../../verification.json'));
-    const cacert = fs.readFileSync(path.resolve(__dirname + '../../src/carekit-root.crt'));
-    const options = {
-      url: 'http://localhost:3000/revisionRecord',
-      method: 'POST',
-      headers: 'Content-Type: application/json',
-      body: input,
-      json: true,
-      ca: cacert
-    };
+  test("Testing POST call to Backend SDK", async () => {
+    const res = await axios({
+      url: "https://localhost:3000/revisionRecord",
+      method: "POST",
+      data: input,
+    });
+    expect(res.data).toEqual("RevisionRecord stored");
+  });
 
-    const output = async (options) => {
-      const response = await request.post(options, function(err, res, body) {
-        if(err) {
-          console.log(`Error: ${err}`);
-        };
-      });
-      return response;
-    }
-    output(options);
-  }),
-  test("Testing GET call to Backend SDK", () => {
-    // code to test goes here
-    const input = require(path.resolve(__dirname + '../../verification.json'));
-    const cacert = fs.readFileSync(path.resolve(__dirname + '../../src/carekit-root.crt'));
-    const options = {
-      url: 'http://localhost:3000/revisionRecord',
-      method: 'GET',
-      headers: 'Content-Type: application/json',
-      body: input,
-      json: true,
-      ca: cacert
-    };
-
-    const output = async (options) => {
-      const response = await request.get(options, function(err, res, body) {
-        if(err) {
-          console.log(`Error: ${err}`);
-        };
-        // if returned json (i.e values stored in the DB) aren't the same as input JSON
-        if (!diff.diff(res, input)){
-          return false;
-        }
-      });
-      return response;
-    }
-    output(options);
+  test("Testing GET call to Backend SDK", async () => {
+    const res = await axios({
+      url: "https://localhost:3000/revisionRecord",
+      method: "GET",
+      params: {
+        knowledgeVector: {
+          processes: [{ id: "1C43F648-D41A-4A5A-8708-15737425FA7C", clock: 2 }],
+        },
+      },
+    });
+    expect(res.data.entities.length).toEqual(2);
   });
 });

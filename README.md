@@ -100,23 +100,21 @@ CareKit Backend SDK is running!
 
 We can validate that the app is running and configured correctly by simply running the predefined validation test, which uses the 'jest' npm package. If the test was run successfully the `npm start` window will have populated a new entry containing a `201` response. 
 
-To run the test, please use the `npm run test` command in a different terminal window (or tab) as depicted below. Please ensure that the directory in the recently opened terminal window/tab is pointed towards the locally cloned **IBM-HyperProtectMBaaS** repo.
+To run the test, please use the `npm test` command in a different terminal window (or tab) as depicted below. Please ensure that the directory in the recently opened terminal window/tab is pointed towards the locally cloned **IBM-HyperProtectMBaaS** repo.
 
 ```bash
-$ npm run test
-
-> ibm-hyperprotect-mbaas@0.0.1 test /Users/ryley.wharton1ibm.com/Documents/Github/IBM-HyperProtectMBaaS
+$ npm test
 > jest
 
-(node:13022) ExperimentalWarning: The fs.promises API is experimental
- PASS  __test__/BackendSDKValidationTest.spec.js
-  BackendSDK CareKit Function
-    ✓ Testing POST calls to Backend SDK (7 ms)
+ PASS  __test__/BackendSDKTest.spec.js
+  Testing MBaaS functionality
+    ✓ Testing POST call to Backend SDK (62 ms)
+    ✓ Testing GET call to Backend SDK (63 ms)
 
 Test Suites: 1 passed, 1 total
-Tests:       1 passed, 1 total
+Tests:       2 passed, 2 total
 Snapshots:   0 total
-Time:        1.575 s
+Time:        0.369 s, estimated 1 s
 Ran all test suites.
 ```
 
