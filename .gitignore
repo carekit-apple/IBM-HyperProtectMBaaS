@@ -5,6 +5,7 @@ package-lock.json
 database.sqlite
 src/migration/*
 *.pem
+*.der
 *.crt
 *.ppk
 .idea/*
@@ -16,3 +17,5 @@ certs/*
 src/carekit-root*
 src/carekit-sdk.csr
 bootstrapping.md
+venv
+.DS_Store

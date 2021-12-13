@@ -53,6 +53,7 @@ if (process.env.MONGO_DB === "localhost"){
     database: "carekit",
     entities: [`${__dirname}/entity/**/*`],
     useNewUrlParser: true,
+    useUnifiedTopology: true,
     url : "mongodb://localhost:27017/",
   };
 } else {
